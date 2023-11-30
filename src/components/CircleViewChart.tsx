@@ -1,7 +1,8 @@
+import { ChartWrapper } from "./ChartWrapper"
 
 export const CircleViewChart = () => {
   return (
-    <div>CircleViewChart</div>
+    <div><ChartWrapper/></div>
   )
 }
 
