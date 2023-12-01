@@ -78,12 +78,16 @@ export const CircleViewChart = (data) => {
               maxSize: '100%',
               zMin: 0,
               zMax: 1000,
+              series: {
+                animation: false
+              },
               layoutAlgorithm: {
                 gravitationalConstant: 0.05,
                 splitSeries: true,
                 seriesInteraction: false,
                 dragBetweenSeries: false,
-                parentNodeLimit: true
+                parentNodeLimit: true,
+                enableSimulation: false
               },
 
               dataLabels: {

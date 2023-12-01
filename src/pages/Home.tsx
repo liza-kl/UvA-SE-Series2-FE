@@ -1,12 +1,14 @@
 import { Page, Tabs, Text, useToasts } from '@geist-ui/core';
+import { useEffect, useState } from 'react';
 import { CircleViewChart } from '../components/CircleViewChart';
 import { DependencyWheelChart } from '../components/DependencyWheelChart';
 import { FileHandling } from '../components/FileHandling';
+import { NoFileUploaded } from '../components/NoFileUploaded';
 import { TableViewChart } from '../components/TableViewChart';
 
 export const Home = () => {
   const { setToast } = useToasts();
-
+  const [isFilePresent, setIsFilePresent] = useState(false);
   const projectTableView = [
     {
       property: 'Project Name',
@@ -138,18 +140,22 @@ export const Home = () => {
     }
   ];
 
+  useEffect(() => {
+    console.log('firing');
+    setIsFilePresent(localStorage.getItem('currentFile') != null);
+  }, [localStorage.getItem('currentFile')]);
+
   const handleResultUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const fileReader = new FileReader();
-    /* @ts-ignore */
     fileReader.readAsText(event.target.files[0], 'UTF-8');
     fileReader.onload = (event) => {
-      /* @ts-ignore */
       localStorage.setItem('currentFile', event.target.result);
     };
+    setIsFilePresent(true);
   };
 
   const handleResetOfCloneResults = () => {
-    if (localStorage.getItem('currentFile') == null) {
+    if (!isFilePresent) {
       console.warn('No file to reset');
       setToast({ text: 'No File to reset', delay: 2000 });
       return;
@@ -174,13 +180,21 @@ export const Home = () => {
         </Tabs.Item>
         <Tabs.Item label="Circle Visualization" value="2">
           {/*@ts-ignore */}
-          <CircleViewChart data={circledata} />
+          {isFilePresent ? (
+            <CircleViewChart data={circledata} />
+          ) : (
+            <NoFileUploaded />
+          )}
         </Tabs.Item>
         <Tabs.Item label="Dependency Wheel Visualization" value="3">
-          <DependencyWheelChart />
+          {isFilePresent ? <DependencyWheelChart /> : <NoFileUploaded />}
         </Tabs.Item>
         <Tabs.Item label="Table Visualization" value="4">
-          <TableViewChart data={projectTableView} />
+          {isFilePresent ? (
+            <TableViewChart data={projectTableView} />
+          ) : (
+            <NoFileUploaded />
+          )}
         </Tabs.Item>
       </Tabs>
     </Page>
