@@ -1,5 +1,6 @@
 import { Page, Tabs, Text, useToasts } from '@geist-ui/core';
 import { CircleViewChart } from '../components/CircleViewChart';
+import { DependencyWheelChart } from '../components/DependencyWheelChart';
 import { FileHandling } from '../components/FileHandling';
 import { TableViewChart } from '../components/TableViewChart';
 
@@ -561,7 +562,10 @@ export const Home = () => {
           {/*@ts-ignore */}
           <CircleViewChart data={circledata} />
         </Tabs.Item>
-        <Tabs.Item label="Table Visualization" value="3">
+        <Tabs.Item label="Dependency Wheel Visualization" value="3">
+          <DependencyWheelChart />
+        </Tabs.Item>
+        <Tabs.Item label="Table Visualization" value="4">
           <TableViewChart data={projectTableView} />
         </Tabs.Item>
       </Tabs>
