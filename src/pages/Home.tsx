@@ -138,6 +138,7 @@ export const Home = () => {
     const fileReader = new FileReader();
     fileReader.readAsText(event.target.files[0], 'UTF-8');
     fileReader.onload = (event) => {
+      /* @ts-ignore */
       localStorage.setItem('currentFile', event.target.result);
     };
     setIsFilePresent(true);
@@ -146,6 +147,7 @@ export const Home = () => {
       delay: 2000
     });
     const formInput = document.querySelector('input[type=file]');
+    /* @ts-ignore */
     formInput.value = null;
   };
 
