@@ -1,8 +1,8 @@
 import { Table } from '@geist-ui/core';
 
 export interface TableRowProps {
-  property: string;
-  value: number | string;
+  property?: string;
+  value?: number | string;
   description?: string;
 }
 type TableViewChartProps = {

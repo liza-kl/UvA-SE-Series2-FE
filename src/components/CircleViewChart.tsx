@@ -43,7 +43,6 @@ export const CircleViewChart = (data) => {
 
                       elem
                         .filter((elem) => elem.name == this.name)
-                        // TODO Create mapping between clone types
                         .map(
                           (elem) =>
                             (elem.color = CloneTypeColor.get(elem.cloneType))

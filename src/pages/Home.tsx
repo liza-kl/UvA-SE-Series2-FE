@@ -5,25 +5,102 @@ import { DependencyWheelChart } from '../components/DependencyWheelChart';
 import { FileHandling } from '../components/FileHandling';
 import { NoFileUploaded } from '../components/NoFileUploaded';
 import { TableViewChart } from '../components/TableViewChart';
+import { parseCircleData, parseProjectData } from '../components/util';
 
 export const Home = () => {
   const { setToast } = useToasts();
   const [isFilePresent, setIsFilePresent] = useState(false);
   const [circleData, setCircleData] = useState();
+  const [projectData, setProjectData] = useState(null);
+
+  useEffect(() => {
+    setIsFilePresent(localStorage.getItem('currentFile') != null);
+    parseCircleData(localStorage.getItem('currentFile'));
+    setProjectData(parseProjectData(localStorage.getItem('currentFile')));
+  }, [localStorage.getItem('currentFile')]);
+
+  const handleResultUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const fileReader = new FileReader();
+    fileReader.readAsText(event.target.files[0], 'UTF-8');
+    fileReader.onload = (event) => {
+      /* @ts-ignore */
+      localStorage.setItem('currentFile', event.target.result);
+      setProjectData(parseProjectData(localStorage.getItem('currentFile')));
+      /* @ts-ignore */
+      setCircleData(event.target.result);
+    };
+    setIsFilePresent(true);
+    setToast({
+      text: 'Successfully uploaded file ✨',
+      delay: 2000
+    });
+    const formInput = document.querySelector('input[type=file]');
+    /* @ts-ignore */
+    formInput.value = null;
+  };
+
+  const handleResetOfCloneResults = () => {
+    if (!isFilePresent) {
+      console.warn('No file to reset');
+      setToast({ text: 'No File to reset', delay: 2000 });
+      return;
+    }
+    localStorage.removeItem('currentFile');
+    setToast({
+      text: 'Reset current file, feel free to upload a new one ✨',
+      delay: 2000
+    });
+  };
+
+  // TODO Extract to custom file
+  const isProjectDataSet =
+    projectData != undefined && Object.keys(projectData).length > 0;
 
   const projectTableView = [
     {
       property: 'Project Name',
-      value: 'smallsql',
-      description: 'Content type'
+      value: !isProjectDataSet ? 'n/a' : projectData.projectResults.projectName,
+      description: ''
     },
     {
-      property: 'Duplicated Lines',
-      value: 59
+      property: 'Number of Lines',
+      value: !isProjectDataSet ? 'n/a' : projectData.projectResults.projectLOC
     },
     {
-      property: 'Amount of clone clases',
-      value: 12
+      property: 'Duplicated Lines ',
+      value: !isProjectDataSet
+        ? 'n/a'
+        : projectData.projectResults.duplicatedLines
+    },
+    {
+      property: 'Duplicated Lines (in %)',
+      value: !isProjectDataSet
+        ? 'n/a'
+        : projectData.projectResults.duplicatedLinePercentage
+    },
+    {
+      property: 'Number of clone classes',
+      value: !isProjectDataSet
+        ? 'n/a'
+        : projectData.projectResults.numberOfCloneClasses
+    },
+    {
+      property: 'Biggest Clone Location',
+      value: !isProjectDataSet
+        ? 'n/a'
+        : projectData.projectResults.biggestCloneLocation
+    },
+    {
+      property: 'Biggest Clone (in Lines)',
+      value: !isProjectDataSet
+        ? 'n/a'
+        : projectData.projectResults.biggestCloneLOC
+    },
+    {
+      property: 'Biggest Clone Class (in Members)',
+      value: !isProjectDataSet
+        ? 'n/a'
+        : projectData.projectResults.biggestCloneClass
     }
   ];
 
@@ -128,41 +205,6 @@ export const Home = () => {
       ]
     }
   ];
-
-  useEffect(() => {
-    console.log('firing');
-    setIsFilePresent(localStorage.getItem('currentFile') != null);
-  }, [localStorage.getItem('currentFile')]);
-
-  const handleResultUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const fileReader = new FileReader();
-    fileReader.readAsText(event.target.files[0], 'UTF-8');
-    fileReader.onload = (event) => {
-      /* @ts-ignore */
-      localStorage.setItem('currentFile', event.target.result);
-    };
-    setIsFilePresent(true);
-    setToast({
-      text: 'Successfully uploaded file ✨',
-      delay: 2000
-    });
-    const formInput = document.querySelector('input[type=file]');
-    /* @ts-ignore */
-    formInput.value = null;
-  };
-
-  const handleResetOfCloneResults = () => {
-    if (!isFilePresent) {
-      console.warn('No file to reset');
-      setToast({ text: 'No File to reset', delay: 2000 });
-      return;
-    }
-    localStorage.removeItem('currentFile');
-    setToast({
-      text: 'Reset current file, feel free to upload a new one ✨',
-      delay: 2000
-    });
-  };
 
   return (
     <Page>

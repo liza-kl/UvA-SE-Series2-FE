@@ -8,3 +8,11 @@ export const CloneTypeColor: Map<CloneTypes, string> = new Map([
   [CloneTypes.TYPE_2, 'red'],
   [CloneTypes.TYPE_3, 'orange']
 ]);
+
+export const parseProjectData = (jsonFile) => {
+  let obj = JSON.parse(jsonFile);
+  return { ...obj };
+};
+export const parseCircleData = (jsonFile) => {
+  let obj = JSON.parse(jsonFile);
+};
