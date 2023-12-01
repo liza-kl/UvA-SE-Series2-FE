@@ -2,7 +2,6 @@ import * as Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import HC_more from 'highcharts/highcharts-more'; //module
 import { useRef } from 'react';
-import { CircleViewDataStructure } from './ChartWrapper.types';
 
 // Load Highcharts modules
 
@@ -11,40 +10,42 @@ import { CircleViewDataStructure } from './ChartWrapper.types';
 // RefObject interface (HighchartsReact.RefObject). All other interfaces
 // like Options come from the Highcharts module itself.
 HC_more(Highcharts); //init module
-interface ChartWrapperProps {
-  chartType: unknown;
-  subtitle?: string;
-  customChartOptions?: HighchartsReact.Props;
-  data: CircleViewDataStructure[];
-}
 
-export const ChartWrapper = ({
-  chartType,
-  data,
-  customChartOptions,
-  subtitle = ''
-}: ChartWrapperProps) => {
+export const DependencyWheelChart = (props: HighchartsReact.Props) => {
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
 
-  const genericChartOptions = {
+  const chartOptions = {
     chart: {
-      type: chartType,
       height: '80%'
     },
     title: {
-      text: subtitle
+      text: ''
+    },
+    subTitle: {
+      text: 'Coffee consumption'
     },
     tooltip: {
       useHTML: true,
       pointFormat: '<b>{point.name}:</b> {point.y}</sub>'
     },
-    series: data.data
+    plotOptions: {
+      dependencywheel: {
+        // shared options for all dependencywheel series
+      }
+    },
+    series: [
+      {
+        type: 'dependencywheel'
+      }
+    ]
   };
+
   return (
     <HighchartsReact
       highcharts={Highcharts}
-      options={Highcharts.merge(genericChartOptions, customChartOptions)}
+      options={chartOptions}
       ref={chartComponentRef}
+      {...props}
     />
   );
 };
