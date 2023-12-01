@@ -9,6 +9,8 @@ import { TableViewChart } from '../components/TableViewChart';
 export const Home = () => {
   const { setToast } = useToasts();
   const [isFilePresent, setIsFilePresent] = useState(false);
+  const [circleData, setCircleData] = useState();
+
   const projectTableView = [
     {
       property: 'Project Name',
@@ -25,19 +27,6 @@ export const Home = () => {
     }
   ];
 
-  type CircleDataPoint = {
-    name: string;
-    filePath: string;
-    endLine: string;
-    cloneType: string;
-    linesOfCode: number;
-  };
-
-  type CircleDataSeries = {
-    name: string;
-    data: CircleDataPoint[];
-  };
-
   const circledata = [
     {
       name: 'root',
@@ -47,7 +36,7 @@ export const Home = () => {
           filePath: '/root',
           startLine: '100',
           endLine: '102',
-          cloneType: '1',
+          cloneType: 'Type 1',
           value: 2
         },
         {
@@ -69,7 +58,7 @@ export const Home = () => {
           filePath: '/public',
           startLine: '100',
           endLine: '102',
-          cloneType: '1',
+          cloneType: 'Type 2',
           value: 2
         },
         {
@@ -152,6 +141,12 @@ export const Home = () => {
       localStorage.setItem('currentFile', event.target.result);
     };
     setIsFilePresent(true);
+    setToast({
+      text: 'Successfully uploaded file ✨',
+      delay: 2000
+    });
+    const formInput = document.querySelector('input[type=file]');
+    formInput.value = null;
   };
 
   const handleResetOfCloneResults = () => {

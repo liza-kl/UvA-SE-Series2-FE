@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ChartWrapper } from './ChartWrapper';
 import { TableRowProps, TableViewChart } from './TableViewChart';
+import { CloneTypeColor } from './util';
 
 export const CircleViewChart = (data) => {
   const [showTable, setShowTable] = useState(false);
@@ -43,7 +44,10 @@ export const CircleViewChart = (data) => {
                       elem
                         .filter((elem) => elem.name == this.name)
                         // TODO Create mapping between clone types
-                        .map((elem) => (elem.color = 'blue'));
+                        .map(
+                          (elem) =>
+                            (elem.color = CloneTypeColor.get(elem.cloneType))
+                        );
                     });
                     /*@ts-ignore */
                     setTableValues([
