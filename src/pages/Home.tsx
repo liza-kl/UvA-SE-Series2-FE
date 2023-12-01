@@ -523,10 +523,12 @@ export const Home = () => {
     }
   ];
 
-  const handleResultUpload = (event) => {
+  const handleResultUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const fileReader = new FileReader();
+    /* @ts-ignore */
     fileReader.readAsText(event.target.files[0], 'UTF-8');
     fileReader.onload = (event) => {
+      /* @ts-ignore */
       localStorage.setItem('currentFile', event.target.result);
     };
   };
@@ -556,6 +558,7 @@ export const Home = () => {
           />
         </Tabs.Item>
         <Tabs.Item label="Circle Visualization" value="2">
+          {/*@ts-ignore */}
           <CircleViewChart data={circledata} />
         </Tabs.Item>
         <Tabs.Item label="Table Visualization" value="3">

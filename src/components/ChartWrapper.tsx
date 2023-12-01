@@ -38,6 +38,7 @@ export const ChartWrapper = ({
       useHTML: true,
       pointFormat: '<b>{point.name}:</b> {point.y}</sub>'
     },
+    /* @ts-ignore */
     series: data.data
   };
   return (

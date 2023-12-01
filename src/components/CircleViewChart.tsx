@@ -8,7 +8,6 @@ export const CircleViewChart = (data: CircleViewDataStructure[]) => {
   const [tableValues, setTableValues] = useState<TableRowProps[]>();
 
   useEffect(() => {
-    console.log('here');
     setTableValues(tableValues);
   }, [tableValues]);
 
@@ -24,7 +23,9 @@ export const CircleViewChart = (data: CircleViewDataStructure[]) => {
               point: {
                 events: {
                   click: function () {
+                    /*@ts-ignore */
                     if (this.formatPrefix == 'parentNode') return;
+                    /*@ts-ignore */
                     setTableValues([{ property: 'test', value: this.y }]);
                     setShowTable(true);
                   }
@@ -61,7 +62,7 @@ export const CircleViewChart = (data: CircleViewDataStructure[]) => {
           }
         }}
       />
-      {showTable && <TableViewChart data={tableValues} />}
+      {showTable && <TableViewChart data={tableValues!} />}
     </>
   );
 };
