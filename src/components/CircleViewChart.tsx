@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { ChartWrapper } from './ChartWrapper';
-import { CircleViewDataStructure } from './ChartWrapper.types';
 import { TableRowProps, TableViewChart } from './TableViewChart';
 
-export const CircleViewChart = (data: CircleViewDataStructure[]) => {
+export const CircleViewChart = (data) => {
   const [showTable, setShowTable] = useState(false);
   const [tableValues, setTableValues] = useState<TableRowProps[]>();
 
