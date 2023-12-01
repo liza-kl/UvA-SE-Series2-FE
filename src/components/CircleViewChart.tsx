@@ -11,6 +11,8 @@ export const CircleViewChart = (data: CircleViewDataStructure[]) => {
     setTableValues(tableValues);
   }, [tableValues]);
 
+  const dataValues = data.data.map((elem) => elem.data);
+
   return (
     <>
       <ChartWrapper
@@ -19,14 +21,54 @@ export const CircleViewChart = (data: CircleViewDataStructure[]) => {
         customChartOptions={{
           plotOptions: {
             series: {
+              color: '#d3d3d3',
+              lineWidth: 1,
+              states: {
+                hover: {
+                  enabled: false
+                }
+              },
               cursor: 'pointer',
+              panning: false,
               point: {
                 events: {
                   click: function () {
                     /*@ts-ignore */
                     if (this.formatPrefix == 'parentNode') return;
+
+                    dataValues.map((elem) => {
+                      elem
+                        .filter((elem) => elem.name != this.name)
+                        .map((elem) => (elem.color = '#d3d3d3'));
+
+                      elem
+                        .filter((elem) => elem.name == this.name)
+                        // TODO Create mapping between clone types
+                        .map((elem) => (elem.color = 'blue'));
+                    });
                     /*@ts-ignore */
-                    setTableValues([{ property: 'test', value: this.y }]);
+                    setTableValues([
+                      {
+                        property: 'file path',
+                        value: this.filePath
+                      },
+                      {
+                        property: 'method name',
+                        value: this.name
+                      },
+                      {
+                        property: 'start line',
+                        value: this.startLine
+                      },
+                      {
+                        property: 'end line ',
+                        value: this.endLine
+                      },
+                      {
+                        property: 'type ',
+                        value: this.cloneType
+                      }
+                    ]);
                     setShowTable(true);
                   }
                 }
@@ -41,17 +83,13 @@ export const CircleViewChart = (data: CircleViewDataStructure[]) => {
                 gravitationalConstant: 0.05,
                 splitSeries: true,
                 seriesInteraction: false,
-                dragBetweenSeries: true,
+                dragBetweenSeries: false,
                 parentNodeLimit: true
               },
+
               dataLabels: {
                 enabled: true,
                 format: '{point.name}',
-                filter: {
-                  property: 'y',
-                  operator: '>',
-                  value: 250
-                },
                 style: {
                   color: 'black',
                   textOutline: 'none',

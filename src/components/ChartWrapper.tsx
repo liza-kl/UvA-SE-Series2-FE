@@ -28,6 +28,7 @@ export const ChartWrapper = ({
 
   const genericChartOptions = {
     chart: {
+      animation: false,
       type: chartType,
       height: '80%'
     },
