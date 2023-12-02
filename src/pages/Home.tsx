@@ -7,7 +7,6 @@ import { NoFileUploaded } from '../components/NoFileUploaded';
 import { TableViewChart } from '../components/TableViewChart';
 import {
   circledata,
-  CloneDependencyWheelSeries,
   getProjectOverviewData,
   parseProjectData,
   prepareDataForDepWheel,
@@ -17,9 +16,6 @@ import {
 export const Home = () => {
   const { setToast } = useToasts();
   const [isFilePresent, setIsFilePresent] = useState(false);
-  const [circleData, setCircleData] = useState();
-  const [depWheelData, setDepWheelData] =
-    useState<CloneDependencyWheelSeries | null>(null);
   const [projectData, setProjectData] = useState<ProjectData | null>(null);
 
   useEffect(() => {

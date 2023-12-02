@@ -67,24 +67,7 @@ export const prepareDataForDepWheel = (
 ): CloneDependencyWheelSeries => {
   if (data == undefined) return;
   const nodeConnections: DependencyWheelDataPoint[] = [];
-
-  const nodeObjects = data.clonePairs.map((elem) => {
-    return [
-      {
-        nodeWidth: 0.25,
-        id: elem[0].filePath,
-        name: elem[0].filePath,
-        linesOfCode: Number(elem[0].endLine) - Number(elem[0].startLine)
-      },
-      {
-        nodeWidth: 0.25,
-        id: elem[1].filePath,
-        name: elem[1].filePath,
-        linesOfCode: Number(elem[1].endLine) - Number(elem[1].startLine)
-      }
-    ];
-  });
-
+  if (data.clonePairs == undefined) return;
   data.clonePairs.map((elem) => {
     nodeConnections.push([
       elem[0].filePath,
