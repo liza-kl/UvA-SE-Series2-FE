@@ -11,7 +11,7 @@ HC_more(Highcharts); //init module
 sankey(Highcharts);
 dependencywheel(Highcharts);
 
-export const DependencyWheelChart = (props: HighchartsReact.Props) => {
+export const DependencyWheelChart = ({ data }) => {
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
   const [showTable, setShowTable] = useState(false);
   const [tableValues, setTableValues] = useState<TableRowProps[]>();
@@ -30,7 +30,8 @@ export const DependencyWheelChart = (props: HighchartsReact.Props) => {
 
     tooltip: {
       useHTML: true,
-      pointFormat: '<b>{point.name}:</b> {point.y}, {point.filename}</sub>'
+      pointFormat:
+        '<b> {point.filename}</b> {point.from}{point.fromLines} → <br></br> {point.to}-{point.toLines}, {point.filename}'
     },
     plotOptions: {
       dependencywheel: {
@@ -43,23 +44,9 @@ export const DependencyWheelChart = (props: HighchartsReact.Props) => {
 
     series: [
       {
-        nodes: [
-          {
-            nodeWidth: 0.25,
-            name: 'ungabunga',
-            id: '/test',
-            colorIndex: 1
-          },
-          {
-            nodeWidth: 0.5,
-            id: '/public',
-            colorIndex: 3
-          }
-        ],
-        keys: ['from', 'to', 'weight', 'name'],
-        data: [['/test', '/public', 1, 'TestFile2.Java']],
+        ...data,
         type: 'dependencywheel',
-        name: 'Dependency wheel series',
+        name: 'Duplications',
         dataLabels: {
           color: '#333',
           style: {
@@ -74,14 +61,12 @@ export const DependencyWheelChart = (props: HighchartsReact.Props) => {
       }
     ]
   };
-
   return (
     <>
       <HighchartsReact
         highcharts={Highcharts}
         options={chartOptions}
         ref={chartComponentRef}
-        {...props}
       />
       <TableViewChart data={[{ property: '', value: '' }]} />
     </>

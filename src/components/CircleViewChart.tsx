@@ -47,6 +47,7 @@ export const CircleViewChart = (data) => {
                           (elem) =>
                             (elem.color = CloneTypeColor.get(elem.cloneType))
                         );
+                      this.elem.color = 'yellow';
                     });
                     /*@ts-ignore */
                     setTableValues([
@@ -65,10 +66,6 @@ export const CircleViewChart = (data) => {
                       {
                         property: 'end line ',
                         value: this.endLine
-                      },
-                      {
-                        property: 'type ',
-                        value: this.cloneType
                       }
                     ]);
                     setShowTable(true);

@@ -5,19 +5,27 @@ import { DependencyWheelChart } from '../components/DependencyWheelChart';
 import { FileHandling } from '../components/FileHandling';
 import { NoFileUploaded } from '../components/NoFileUploaded';
 import { TableViewChart } from '../components/TableViewChart';
-import { parseCircleData, parseProjectData } from '../components/util';
+import {
+  circledata,
+  CloneDependencyWheelSeries,
+  getProjectOverviewData,
+  parseProjectData,
+  prepareDataForDepWheel,
+  ProjectData
+} from '../components/util';
 
 export const Home = () => {
   const { setToast } = useToasts();
   const [isFilePresent, setIsFilePresent] = useState(false);
   const [circleData, setCircleData] = useState();
-  const [projectData, setProjectData] = useState(null);
+  const [depWheelData, setDepWheelData] =
+    useState<CloneDependencyWheelSeries | null>(null);
+  const [projectData, setProjectData] = useState<ProjectData | null>(null);
 
   useEffect(() => {
     setIsFilePresent(localStorage.getItem('currentFile') != null);
-    parseCircleData(localStorage.getItem('currentFile'));
     setProjectData(parseProjectData(localStorage.getItem('currentFile')));
-  }, [localStorage.getItem('currentFile')]);
+  }, [isFilePresent]);
 
   const handleResultUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const fileReader = new FileReader();
@@ -25,11 +33,9 @@ export const Home = () => {
     fileReader.onload = (event) => {
       /* @ts-ignore */
       localStorage.setItem('currentFile', event.target.result);
-      setProjectData(parseProjectData(localStorage.getItem('currentFile')));
-      /* @ts-ignore */
-      setCircleData(event.target.result);
     };
     setIsFilePresent(true);
+
     setToast({
       text: 'Successfully uploaded file ✨',
       delay: 2000
@@ -52,159 +58,8 @@ export const Home = () => {
     });
   };
 
-  // TODO Extract to custom file
   const isProjectDataSet =
     projectData != undefined && Object.keys(projectData).length > 0;
-
-  const projectTableView = [
-    {
-      property: 'Project Name',
-      value: !isProjectDataSet ? 'n/a' : projectData.projectResults.projectName,
-      description: ''
-    },
-    {
-      property: 'Number of Lines',
-      value: !isProjectDataSet ? 'n/a' : projectData.projectResults.projectLOC
-    },
-    {
-      property: 'Duplicated Lines ',
-      value: !isProjectDataSet
-        ? 'n/a'
-        : projectData.projectResults.duplicatedLines
-    },
-    {
-      property: 'Duplicated Lines (in %)',
-      value: !isProjectDataSet
-        ? 'n/a'
-        : projectData.projectResults.duplicatedLinePercentage
-    },
-    {
-      property: 'Number of clone classes',
-      value: !isProjectDataSet
-        ? 'n/a'
-        : projectData.projectResults.numberOfCloneClasses
-    },
-    {
-      property: 'Biggest Clone Location',
-      value: !isProjectDataSet
-        ? 'n/a'
-        : projectData.projectResults.biggestCloneLocation
-    },
-    {
-      property: 'Biggest Clone (in Lines)',
-      value: !isProjectDataSet
-        ? 'n/a'
-        : projectData.projectResults.biggestCloneLOC
-    },
-    {
-      property: 'Biggest Clone Class (in Members)',
-      value: !isProjectDataSet
-        ? 'n/a'
-        : projectData.projectResults.biggestCloneClass
-    }
-  ];
-
-  const circledata = [
-    {
-      name: 'root',
-      data: [
-        {
-          name: 'draw',
-          filePath: '/root',
-          startLine: '100',
-          endLine: '102',
-          cloneType: 'Type 1',
-          value: 2
-        },
-        {
-          name: 'Croatia',
-          value: 20.7
-        },
-        {
-          name: 'Belgium',
-          value: 97.2
-        }
-      ]
-    },
-    {
-      linkedTo: ':previous',
-      name: 'public',
-      data: [
-        {
-          name: 'draw',
-          filePath: '/public',
-          startLine: '100',
-          endLine: '102',
-          cloneType: 'Type 2',
-          value: 2
-        },
-        {
-          name: 'Cameroon',
-          value: 9.2
-        },
-        {
-          name: 'Zimbabwe',
-          value: 13.1
-        },
-        {
-          name: 'Ghana',
-          value: 14.1
-        },
-        {
-          name: 'Kenya',
-          value: 14.1
-        },
-        {
-          name: 'Sudan',
-          value: 17.3
-        },
-        {
-          name: 'Tunisia',
-          value: 24.3
-        },
-        {
-          name: 'Angola',
-          value: 25
-        },
-        {
-          name: 'Libya',
-          value: 50.6
-        },
-        {
-          name: 'Ivory Coast',
-          value: 7.3
-        },
-        {
-          name: 'Morocco',
-          value: 60.7
-        },
-        {
-          name: 'Ethiopia',
-          value: 8.9
-        },
-        {
-          name: 'United Republic of Tanzania',
-          value: 9.1
-        },
-        {
-          name: 'Nigeria',
-          value: 93.9
-        },
-        {
-          name: 'South Africa',
-          value: 392.7
-        },
-        {
-          name: 'Egypt',
-          value: 225.1
-        },
-        {
-          name: 'Algeria',
-          value: 141.5
-        }
-      ]
-    }
-  ];
 
   return (
     <Page>
@@ -226,11 +81,17 @@ export const Home = () => {
           )}
         </Tabs.Item>
         <Tabs.Item label="Dependency Wheel Visualization" value="3">
-          {isFilePresent ? <DependencyWheelChart /> : <NoFileUploaded />}
+          {isFilePresent ? (
+            <DependencyWheelChart data={prepareDataForDepWheel(projectData)} />
+          ) : (
+            <NoFileUploaded />
+          )}
         </Tabs.Item>
         <Tabs.Item label="Table Visualization" value="4">
           {isFilePresent ? (
-            <TableViewChart data={projectTableView} />
+            <TableViewChart
+              data={getProjectOverviewData(projectData, isProjectDataSet)}
+            />
           ) : (
             <NoFileUploaded />
           )}
