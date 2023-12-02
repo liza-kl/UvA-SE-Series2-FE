@@ -37,9 +37,6 @@ export const parseProjectData = (jsonFile): ProjectData => {
   let obj = JSON.parse(jsonFile);
   return { ...obj };
 };
-export const parseCircleData = (jsonFile) => {
-  let obj = JSON.parse(jsonFile);
-};
 
 type DependencyWheelDataPoint = [
   string,
@@ -135,104 +132,43 @@ export const getProjectOverviewData = (
   ];
 };
 
-export const circledata = [
-  {
-    name: 'root',
-    data: [
-      {
-        name: 'draw',
-        filePath: '/root',
-        startLine: '100',
-        endLine: '102',
-        cloneType: 'Type 1',
-        value: 2
-      },
-      {
-        name: 'Croatia',
-        value: 20.7
-      },
-      {
-        name: 'Belgium',
-        value: 97.2
-      }
-    ]
-  },
-  {
-    linkedTo: ':previous',
-    name: 'public',
-    data: [
-      {
-        name: 'draw',
-        filePath: '/public',
-        startLine: '100',
-        endLine: '102',
-        cloneType: 'Type 2',
-        value: 2
-      },
-      {
-        name: 'Cameroon',
-        value: 9.2
-      },
-      {
-        name: 'Zimbabwe',
-        value: 13.1
-      },
-      {
-        name: 'Ghana',
-        value: 14.1
-      },
-      {
-        name: 'Kenya',
-        value: 14.1
-      },
-      {
-        name: 'Sudan',
-        value: 17.3
-      },
-      {
-        name: 'Tunisia',
-        value: 24.3
-      },
-      {
-        name: 'Angola',
-        value: 25
-      },
-      {
-        name: 'Libya',
-        value: 50.6
-      },
-      {
-        name: 'Ivory Coast',
-        value: 7.3
-      },
-      {
-        name: 'Morocco',
-        value: 60.7
-      },
-      {
-        name: 'Ethiopia',
-        value: 8.9
-      },
-      {
-        name: 'United Republic of Tanzania',
-        value: 9.1
-      },
-      {
-        name: 'Nigeria',
-        value: 93.9
-      },
-      {
-        name: 'South Africa',
-        value: 392.7
-      },
-      {
-        name: 'Egypt',
-        value: 225.1
-      },
-      {
-        name: 'Algeria',
-        value: 141.5
-      }
-    ]
-  }
-];
+export const getPackedBubbleData = (data: ProjectData) => {
+  if (data == null) return;
+  const flattenedNodes = data.clonePairs.flat();
+
+  const locationBuckets: Map<string, any[]> = new Map();
+  flattenedNodes.map((elem) => {
+    let lastIndex = elem.filePath.lastIndexOf('/');
+    let result = elem.filePath;
+    let methodName = elem.methodName.split('/');
+
+    if (locationBuckets.has(result)) {
+      locationBuckets.get(result).push({
+        name: methodName[methodName.length - 1],
+        filePath: elem.filePath,
+        value: Number(elem.endLine) - Number(elem.startLine),
+        startLine: elem.startLine,
+        endLine: elem.endLine,
+        loc: elem.filePath
+      });
+    } else {
+      locationBuckets.set(result, [elem]);
+    }
+  });
+
+  const directory = [];
+
+  const directoryNodes = () => {
+    locationBuckets.forEach((value, key, map) => {
+      directory.push({
+        name: key,
+        data: value
+      });
+    });
+  };
+
+  // Call the function to populate the directory array
+  directoryNodes();
+
+  return directory;
+};

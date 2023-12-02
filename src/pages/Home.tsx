@@ -6,7 +6,7 @@ import { FileHandling } from '../components/FileHandling';
 import { NoFileUploaded } from '../components/NoFileUploaded';
 import { TableViewChart } from '../components/TableViewChart';
 import {
-  circledata,
+  getPackedBubbleData,
   getProjectOverviewData,
   parseProjectData,
   prepareDataForDepWheel,
@@ -57,6 +57,8 @@ export const Home = () => {
   const isProjectDataSet =
     projectData != undefined && Object.keys(projectData).length > 0;
 
+  console.log(getPackedBubbleData(projectData));
+
   return (
     <Page>
       <Text h1>Clone Visualization</Text>
@@ -71,7 +73,7 @@ export const Home = () => {
         <Tabs.Item label="Circle Visualization" value="2">
           {/*@ts-ignore */}
           {isFilePresent ? (
-            <CircleViewChart data={circledata} />
+            <CircleViewChart data={getPackedBubbleData(projectData)} />
           ) : (
             <NoFileUploaded />
           )}
