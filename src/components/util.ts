@@ -17,6 +17,7 @@ type NodeItem = {
   methodName: string;
   startLine: string;
   endLine: string;
+  methodLOC: string;
 };
 
 export type ProjectData = {
@@ -25,7 +26,6 @@ export type ProjectData = {
   duplicatedLines: string | number | undefined;
   duplicatedLinePercentage: string | number | undefined;
   numberOfCloneClasses: number | string | undefined;
-  biggestCloneLocation: string | undefined;
   biggestCloneLOC: number | string | undefined;
   biggestCloneClass: number | string | undefined;
   massThreshold: string;
@@ -118,10 +118,6 @@ export const getProjectOverviewData = (
       value: !isProjectDataSet ? 'n/a' : projectData.numberOfCloneClasses
     },
     {
-      property: 'Biggest Clone Location',
-      value: !isProjectDataSet ? 'n/a' : projectData.biggestCloneLocation
-    },
-    {
       property: 'Biggest Clone (in Lines)',
       value: !isProjectDataSet ? 'n/a' : projectData.biggestCloneLOC
     },
@@ -146,9 +142,10 @@ export const getPackedBubbleData = (data: ProjectData) => {
       locationBuckets.get(result).push({
         name: methodName[methodName.length - 1],
         filePath: elem.filePath,
-        value: Number(elem.endLine) - Number(elem.startLine),
+        value: elem.methodLOC,
         startLine: elem.startLine,
         endLine: elem.endLine,
+        methodLOC: elem.methodLOC,
         loc: elem.filePath
       });
     } else {

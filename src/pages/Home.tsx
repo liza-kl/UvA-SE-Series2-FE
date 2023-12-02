@@ -1,4 +1,4 @@
-import { Page, Tabs, Text, useToasts } from '@geist-ui/core';
+import { Button, Page, Tabs, Text, useToasts } from '@geist-ui/core';
 import { useEffect, useState } from 'react';
 import { CircleViewChart } from '../components/CircleViewChart';
 import { DependencyWheelChart } from '../components/DependencyWheelChart';
@@ -9,18 +9,17 @@ import {
   getPackedBubbleData,
   getProjectOverviewData,
   parseProjectData,
-  prepareDataForDepWheel,
-  ProjectData
+  prepareDataForDepWheel
 } from '../components/util';
-
 export const Home = () => {
   const { setToast } = useToasts();
   const [isFilePresent, setIsFilePresent] = useState(false);
-  const [projectData, setProjectData] = useState<ProjectData | null>(null);
 
   useEffect(() => {
-    setIsFilePresent(localStorage.getItem('currentFile') != null);
-    setProjectData(parseProjectData(localStorage.getItem('currentFile')));
+    if (localStorage.getItem('currentFile') != null) {
+      setIsFilePresent(true);
+    }
+    setIsFilePresent(false);
   }, [isFilePresent]);
 
   const handleResultUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,7 +41,7 @@ export const Home = () => {
   };
 
   const handleResetOfCloneResults = () => {
-    if (!isFilePresent) {
+    if (localStorage.getItem('currentFile') == null) {
       console.warn('No file to reset');
       setToast({ text: 'No File to reset', delay: 2000 });
       return;
@@ -54,42 +53,60 @@ export const Home = () => {
     });
   };
 
-  const isProjectDataSet =
-    projectData != undefined && Object.keys(projectData).length > 0;
+  const uploadEncryptor = () => {
+    fetch('/sample_encryptor.json')
+      .then((response) => response.json())
+      .then((json) =>
+        localStorage.setItem('currentFile', JSON.stringify(json))
+      );
+    setIsFilePresent(true);
+    setToast({
+      text: 'Set small encryptor as project ✨',
+      delay: 2000
+    });
+  };
 
-  console.log(getPackedBubbleData(projectData));
-
+  const isProjectDataSet = localStorage.getItem('currentFile') != null;
+  const projectData = parseProjectData(localStorage.getItem('currentFile'));
   return (
     <Page>
       <Text h1>Clone Visualization</Text>
       <Tabs initialValue="1">
         <Tabs.Item label="Upload File To Evaluate" value="1">
-          <FileHandling
-            onUpload={handleResultUpload}
-            onReset={handleResetOfCloneResults}
-            resetLabel="Reset Current File"
-          />
+          <>
+            {isProjectDataSet && (
+              <Text>
+                Current File you are working with: {projectData.projectName}
+              </Text>
+            )}
+            <FileHandling
+              onUpload={handleResultUpload}
+              onReset={handleResetOfCloneResults}
+              resetLabel="Reset Current File"
+            />
+            <Text>Or choose one of the sample projects below</Text>
+            <Button onClick={uploadEncryptor}>Small SQL Project</Button>
+          </>
         </Tabs.Item>
-        <Tabs.Item label="Circle Visualization" value="2">
-          {/*@ts-ignore */}
-          {isFilePresent ? (
+        <Tabs.Item label="Project Overview" value="2">
+          {isProjectDataSet ? (
+            <TableViewChart
+              data={getProjectOverviewData(projectData, isProjectDataSet)}
+            />
+          ) : (
+            <NoFileUploaded />
+          )}
+        </Tabs.Item>
+        <Tabs.Item label="Circle Visualization" value="3">
+          {isProjectDataSet ? (
             <CircleViewChart data={getPackedBubbleData(projectData)} />
           ) : (
             <NoFileUploaded />
           )}
         </Tabs.Item>
-        <Tabs.Item label="Dependency Wheel Visualization" value="3">
-          {isFilePresent ? (
+        <Tabs.Item label="Dependency Wheel Visualization" value="4">
+          {isProjectDataSet ? (
             <DependencyWheelChart data={prepareDataForDepWheel(projectData)} />
-          ) : (
-            <NoFileUploaded />
-          )}
-        </Tabs.Item>
-        <Tabs.Item label="Table Visualization" value="4">
-          {isFilePresent ? (
-            <TableViewChart
-              data={getProjectOverviewData(projectData, isProjectDataSet)}
-            />
           ) : (
             <NoFileUploaded />
           )}

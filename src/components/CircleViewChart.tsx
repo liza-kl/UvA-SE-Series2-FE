@@ -12,7 +12,6 @@ export const CircleViewChart = (data) => {
 
   const dataValues = data.data.map((elem) => elem.data);
 
-  console.log(data);
   return (
     <>
       <ChartWrapper
@@ -57,6 +56,10 @@ export const CircleViewChart = (data) => {
                         value: this.name
                       },
                       {
+                        property: 'method loc',
+                        value: this.methodLOC
+                      },
+                      {
                         property: 'start line',
                         value: this.startLine
                       },
@@ -71,9 +74,9 @@ export const CircleViewChart = (data) => {
               }
             },
             packedbubble: {
-              minSize: '20%',
+              minSize: '50%',
               maxSize: '100%',
-              zMin: 0,
+              zMin: 20,
               zMax: 1000,
               series: {
                 animation: false
@@ -90,6 +93,7 @@ export const CircleViewChart = (data) => {
               dataLabels: {
                 enabled: true,
                 format: '{point.name}',
+                parentNodeFormat: '{point.series.name}',
                 style: {
                   color: 'black',
                   textOutline: 'none',
