@@ -67,6 +67,19 @@ export const Home = () => {
     });
   };
 
+  const uploadSmallSQL = () => {
+    fetch('/sample_smallsql.json')
+      .then((response) => response.json())
+      .then((json) =>
+        localStorage.setItem('currentFile', JSON.stringify(json))
+      );
+    setIsFilePresent(true);
+    setToast({
+      text: 'Set smallsql as project ✨',
+      delay: 2000
+    });
+  };
+
   const isProjectDataSet = localStorage.getItem('currentFile') != null;
   const projectData = parseProjectData(localStorage.getItem('currentFile'));
   return (
@@ -76,7 +89,6 @@ export const Home = () => {
       <Tabs initialValue="1">
         <Tabs.Item label="Upload File To Evaluate" value="1">
           <>
-
             <HowToBlock></HowToBlock>
             {isProjectDataSet && (
               <Text>
@@ -89,7 +101,10 @@ export const Home = () => {
               resetLabel="Reset Current File"
             />
             <Text>Or choose one of the sample projects below</Text>
-            <Button onClick={uploadEncryptor}>Small SQL Project</Button>
+            <Button onClick={uploadEncryptor}>
+              Test Project (Small Encryptor)
+            </Button>
+            <Button onClick={uploadSmallSQL}>Small SQL Project</Button>
           </>
         </Tabs.Item>
         <Tabs.Item label="Project Overview" value="2">
