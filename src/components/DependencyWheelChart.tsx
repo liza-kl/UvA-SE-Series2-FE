@@ -46,7 +46,7 @@ export const DependencyWheelChart = ({ data }) => {
                 setTableValues([[
                 {
                   property: 'Clone Location',
-                  value: <Link target="_blank" href={'file://' + this.from + ":" + this.fromLine + ":" + "1"} icon color>{this.from}</Link>
+                  value: <Link target="_blank" href={'vscode://file' + this.from + ":" + this.fromLine + ":" + "1"} icon color>{this.from}</Link>
                 },
                 {
                   property: 'Code Lines',
@@ -61,7 +61,7 @@ export const DependencyWheelChart = ({ data }) => {
               [
                 {
                   property: 'Clone Location',
-                  value: <Link target="_blank" href={'file://' + this.to + ":" + this.toLine + ":" + "1"} icon color>{this.to}</Link>
+                  value: <Link target="_blank" href={'vscode://file' + this.to + ":" + this.toLine + ":" + "1"} icon color>{this.to}</Link>
                 },
                 {
                   property: 'Code Lines',
