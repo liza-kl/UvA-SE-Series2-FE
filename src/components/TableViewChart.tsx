@@ -1,7 +1,7 @@
 import { Table } from '@geist-ui/core';
 
 export interface TableRowProps {
-  property?: string;
+  property?: string | any;
   value?: number | string | any;
   description?: string;
 }

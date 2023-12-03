@@ -46,6 +46,8 @@ type DependencyWheelDataPoint = [
   string,
   string,
   string,
+  string,
+  string,
   number,
   number,
 ];
@@ -72,18 +74,20 @@ export const prepareDataForDepWheel = (
   data.clonePairs.map((elem) => {
     nodeConnections.push([
       elem[0].filePath,
+      `${elem[1].startLine}`,
       `${elem[0].startLine}-${elem[0].endLine}`,
       atob(elem[0].base64Content),
       elem[1].filePath,
-      atob(elem[1].base64Content),
+      `${elem[1].startLine}`,
       `${elem[1].startLine}-${elem[1].endLine}`,
+      atob(elem[1].base64Content),
       Number(elem[0].endLine) - Number(elem[0].startLine),
       Number(elem[0].endLine) - Number(elem[0].startLine),
     ]);
   });
 
   const preparedData = {
-    keys: ['from', 'fromLines','fromClone', 'to', 'toClone', 'toLines', 'weight', 'linesOfCode'],
+    keys: ['from','fromLine', 'fromLines','fromClone', 'to','toLine', 'toLines','toClone',  'weight', 'linesOfCode'],
     data: nodeConnections
   };
   return preparedData;

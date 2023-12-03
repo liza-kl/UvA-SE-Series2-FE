@@ -1,4 +1,4 @@
-import { Code, Text } from '@geist-ui/core';
+import { Code, Link, Text } from '@geist-ui/core';
 import * as Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import HC_more from 'highcharts/highcharts-more'; //module
@@ -15,7 +15,7 @@ dependencywheel(Highcharts);
 export const DependencyWheelChart = ({ data }) => {
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
   const [showTable, setShowTable] = useState(false);
-  const [tableValues, setTableValues] = useState<TableRowProps[]>();
+  const [tableValues, setTableValues] = useState<TableRowProps[][]>();
 
   useEffect(() => {
     setTableValues(tableValues);
@@ -42,15 +42,37 @@ export const DependencyWheelChart = ({ data }) => {
           point: {
             events: {
               click:  function ()  {
-              
-              /*@ts-ignore */
-              setTableValues([
+                
+                setTableValues([[
+                {
+                  property: 'Clone Location',
+                  value: <Link target="_blank" href={'file://' + this.from + ":" + this.fromLine + ":" + "1"} icon color>{this.from}</Link>
+                },
+                {
+                  property: 'Code Lines',
+                  value: this.fromLines
+                },
                 {
                   property: 'clone content',
                   value: <Code block>{this.fromClone}</Code>
                 },
                
-              ]);
+              ],
+              [
+                {
+                  property: 'Clone Location',
+                  value: <Link target="_blank" href={'file://' + this.to + ":" + this.toLine + ":" + "1"} icon color>{this.to}</Link>
+                },
+                {
+                  property: 'Code Lines',
+                  value: this.toLines
+                },
+                {
+                  property: 'clone content',
+                  value: <Code block>{this.toClone}</Code>
+                },
+               
+              ]]);
               setShowTable(true);
             
             
@@ -91,7 +113,12 @@ export const DependencyWheelChart = ({ data }) => {
         options={chartOptions}
         ref={chartComponentRef}
       />
-     {showTable && <><Text>Clone in Detail</Text><TableViewChart data={tableValues} /></>}
+     {showTable && <><Text>Clones in Detail</Text>
+     {tableValues.map((value, idx) => 
+     <>
+     <TableViewChart data={value} key={idx}/>
+     </>)}
+     </>}
     </>
   );
 };
