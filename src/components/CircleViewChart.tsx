@@ -60,11 +60,11 @@ export const CircleViewChart = (data) => {
                         value: this.methodLOC
                       },
                       {
-                        property: 'start line',
+                        property: 'start line of clone',
                         value: this.startLine
                       },
                       {
-                        property: 'end line ',
+                        property: 'end line of clone',
                         value: this.endLine
                       }
                     ]);

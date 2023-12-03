@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { CircleViewChart } from '../components/CircleViewChart';
 import { DependencyWheelChart } from '../components/DependencyWheelChart';
 import { FileHandling } from '../components/FileHandling';
+import { HowToBlock } from '../components/HowToBlock';
 import { NoFileUploaded } from '../components/NoFileUploaded';
 import { TableViewChart } from '../components/TableViewChart';
 import {
@@ -71,9 +72,12 @@ export const Home = () => {
   return (
     <Page>
       <Text h1>Clone Visualization</Text>
+
       <Tabs initialValue="1">
         <Tabs.Item label="Upload File To Evaluate" value="1">
           <>
+
+            <HowToBlock></HowToBlock>
             {isProjectDataSet && (
               <Text>
                 Current File you are working with: {projectData.projectName}

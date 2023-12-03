@@ -18,6 +18,7 @@ type NodeItem = {
   startLine: string;
   endLine: string;
   methodLOC: string;
+  base64Content: string;
 };
 
 export type ProjectData = {
@@ -43,8 +44,10 @@ type DependencyWheelDataPoint = [
   string,
   string,
   string,
+  string,
+  string,
   number,
-  number
+  number,
 ];
 
 type DependencyWheelNode = {
@@ -52,6 +55,7 @@ type DependencyWheelNode = {
   name: string;
   id: string;
   linesOfCode: number;
+  parent: string;
 };
 export type CloneDependencyWheelSeries = {
   nodes?: DependencyWheelNode[] | undefined;
@@ -69,15 +73,17 @@ export const prepareDataForDepWheel = (
     nodeConnections.push([
       elem[0].filePath,
       `${elem[0].startLine}-${elem[0].endLine}`,
+      atob(elem[0].base64Content),
       elem[1].filePath,
+      atob(elem[1].base64Content),
       `${elem[1].startLine}-${elem[1].endLine}`,
       Number(elem[0].endLine) - Number(elem[0].startLine),
-      Number(elem[0].endLine) - Number(elem[0].startLine)
+      Number(elem[0].endLine) - Number(elem[0].startLine),
     ]);
   });
 
   const preparedData = {
-    keys: ['from', 'fromLines', 'to', 'toLines', 'weight', 'linesOfCode'],
+    keys: ['from', 'fromLines','fromClone', 'to', 'toClone', 'toLines', 'weight', 'linesOfCode'],
     data: nodeConnections
   };
   return preparedData;

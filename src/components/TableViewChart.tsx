@@ -2,7 +2,7 @@ import { Table } from '@geist-ui/core';
 
 export interface TableRowProps {
   property?: string;
-  value?: number | string;
+  value?: number | string | any;
   description?: string;
 }
 type TableViewChartProps = {

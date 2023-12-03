@@ -1,3 +1,4 @@
+import { Code, Text } from '@geist-ui/core';
 import * as Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import HC_more from 'highcharts/highcharts-more'; //module
@@ -36,10 +37,32 @@ export const DependencyWheelChart = ({ data }) => {
     plotOptions: {
       dependencywheel: {
         // shared options for all dependencywheel series
+        allowPointSelect: true,
+
+          point: {
+            events: {
+              click:  function ()  {
+              
+              /*@ts-ignore */
+              setTableValues([
+                {
+                  property: 'clone content',
+                  value: <Code block>{this.fromClone}</Code>
+                },
+               
+              ]);
+              setShowTable(true);
+            
+            
+            }
+            }
+          },
         series: {
-          lineWidth: 1
+          lineWidth: 1,
         }
       }
+
+      
     },
 
     series: [
@@ -68,7 +91,7 @@ export const DependencyWheelChart = ({ data }) => {
         options={chartOptions}
         ref={chartComponentRef}
       />
-      <TableViewChart data={[{ property: '', value: '' }]} />
+     {showTable && <><Text>Clone in Detail</Text><TableViewChart data={tableValues} /></>}
     </>
   );
 };
