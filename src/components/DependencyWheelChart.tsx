@@ -116,6 +116,7 @@ export const DependencyWheelChart = ({ data }) => {
      {showTable && <><Text>Clones in Detail</Text>
      {tableValues.map((value, idx) => 
      <>
+     <Text h3>Clone #{idx + 1}</Text>
      <TableViewChart data={value} key={idx}/>
      </>)}
      </>}
