@@ -54,28 +54,15 @@ export const Home = () => {
     });
   };
 
-  const uploadEncryptor = () => {
-    fetch('/sample_encryptor.json')
+  const uploadPreset = (presetName: string) => {
+    fetch(presetName)
       .then((response) => response.json())
       .then((json) =>
         localStorage.setItem('currentFile', JSON.stringify(json))
       );
     setIsFilePresent(true);
     setToast({
-      text: 'Set small encryptor as project ✨',
-      delay: 2000
-    });
-  };
-
-  const uploadSmallSQL = () => {
-    fetch('/sample_smallsql.json')
-      .then((response) => response.json())
-      .then((json) =>
-        localStorage.setItem('currentFile', JSON.stringify(json))
-      );
-    setIsFilePresent(true);
-    setToast({
-      text: 'Set smallsql as project ✨',
+      text: `Set ${presetName} as project ✨`,
       delay: 2000
     });
   };
@@ -101,10 +88,15 @@ export const Home = () => {
               resetLabel="Reset Current File"
             />
             <Text>Or choose one of the sample projects below</Text>
-            <Button onClick={uploadEncryptor}>
+            <Button onClick={() => uploadPreset('sample_encryptor.json')}>
               Test Project (Small Encryptor)
             </Button>
-            <Button onClick={uploadSmallSQL}>Small SQL Project</Button>
+            <Button onClick={() => uploadPreset('sample_smallsql.json')}>
+              Small SQL Project
+            </Button>
+            <Button onClick={() => uploadPreset('sample_hsql.json')}>
+              HSQL Project
+            </Button>
           </>
         </Tabs.Item>
         <Tabs.Item label="Project Overview" value="2">
