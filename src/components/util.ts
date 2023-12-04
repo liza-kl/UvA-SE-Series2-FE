@@ -12,6 +12,7 @@ export const CloneTypeColor: Map<CloneTypes, string> = new Map([
 type NodeID = string;
 
 type NodeItem = {
+  [x: string]: any;
   id: NodeID;
   filePath: string;
   methodName: string;
@@ -49,7 +50,7 @@ type DependencyWheelDataPoint = [
   string,
   string,
   number,
-  number,
+  number
 ];
 
 type DependencyWheelNode = {
@@ -65,6 +66,16 @@ export type CloneDependencyWheelSeries = {
   data: DependencyWheelDataPoint[];
 };
 
+function getAllTwoElementTuples(arr) {
+  return arr.flatMap((value, index) =>
+    arr.slice(index + 1).map((innerValue) => [value, innerValue])
+  );
+}
+
+function extractKeyValues(array, key) {
+  return array.map((obj) => obj[key]);
+}
+
 export const prepareDataForDepWheel = (
   data: ProjectData
 ): CloneDependencyWheelSeries => {
@@ -72,22 +83,41 @@ export const prepareDataForDepWheel = (
   const nodeConnections: DependencyWheelDataPoint[] = [];
   if (data.clonePairs == undefined) return;
   data.clonePairs.map((elem) => {
-    nodeConnections.push([
-      elem[0].filePath,
-      `${elem[1].startLine}`,
-      `${elem[0].startLine}-${elem[0].endLine}`,
-      atob(elem[0].base64Content),
-      elem[1].filePath,
-      `${elem[1].startLine}`,
-      `${elem[1].startLine}-${elem[1].endLine}`,
-      atob(elem[1].base64Content),
-      Number(elem[0].endLine) - Number(elem[0].startLine),
-      Number(elem[0].endLine) - Number(elem[0].startLine),
-    ]);
+    const keyValues = extractKeyValues(elem, 'id');
+    const possiblePairs = getAllTwoElementTuples(keyValues);
+
+    possiblePairs.map((possiblePair) => {
+      const firstElem = elem.find((clone) => clone.id == possiblePair[0]);
+      const secondElem = elem.find((clone) => clone.id == possiblePair[1]);
+
+      nodeConnections.push([
+        firstElem.filePath,
+        `${secondElem.startLine}`,
+        `${firstElem.startLine}-${firstElem.endLine}`,
+        atob(firstElem.base64Content),
+        secondElem.filePath,
+        `${secondElem.startLine}`,
+        `${secondElem.startLine}-${secondElem.endLine}`,
+        atob(secondElem.base64Content),
+        Number(firstElem.endLine) - Number(firstElem.startLine),
+        Number(firstElem.endLine) - Number(firstElem.startLine)
+      ]);
+    });
   });
 
   const preparedData = {
-    keys: ['from','fromLine', 'fromLines','fromClone', 'to','toLine', 'toLines','toClone',  'weight', 'linesOfCode'],
+    keys: [
+      'from',
+      'fromLine',
+      'fromLines',
+      'fromClone',
+      'to',
+      'toLine',
+      'toLines',
+      'toClone',
+      'weight',
+      'linesOfCode'
+    ],
     data: nodeConnections
   };
   return preparedData;
