@@ -1,4 +1,4 @@
-import { Button, Code, Collapse, Link, Table } from '@geist-ui/core';
+import { Button, Code, Collapse, Link, Table, Tooltip } from '@geist-ui/core';
 import { useState } from 'react';
 import { NodeItem } from './util';
 
@@ -71,7 +71,9 @@ const getCloneClassCells = (cloneClasses: NodeItem[]): RawCloneClassCell[] => {
               icon
               color
             >
-              {getOnlyFileName(elem.filePath)}:{elem.startLine}:{elem.endLine}
+              <Tooltip text={elem.filePath}>
+                {getOnlyFileName(elem.filePath)}:{elem.startLine}:{elem.endLine}
+              </Tooltip>
             </Link>
           </>
         );
@@ -91,7 +93,7 @@ export const RawCloneClassTable = ({
   return (
     <Table data={data}>
       <Table.Column prop="cloneClassID" label="Clone Class ID" />
-      <Table.Column prop="numFiles" label="Contained Files" />
+      <Table.Column prop="numFiles" label="Contained Locations" />
       <Table.Column prop="duplicatedLines" label="Duplicated Lines" />
     </Table>
   );
