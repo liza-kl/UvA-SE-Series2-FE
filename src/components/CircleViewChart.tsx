@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { ChartWrapper } from './ChartWrapper';
 import { TableRowProps, TableViewChart } from './TableViewChart';
 
-export const CircleViewChart = (data) => {
+export const CircleViewChart = (data, cloneClasses) => {
   const [showTable, setShowTable] = useState(false);
   const [tableValues, setTableValues] = useState<TableRowProps[]>();
 
@@ -11,7 +11,6 @@ export const CircleViewChart = (data) => {
   }, [tableValues]);
 
   const dataValues = data.data.map((elem) => elem.data);
-
   return (
     <>
       <ChartWrapper
@@ -86,7 +85,7 @@ export const CircleViewChart = (data) => {
                 splitSeries: true,
                 seriesInteraction: false,
                 dragBetweenSeries: false,
-                parentNodeLimit: true,
+                parentNodeLimit: false,
                 enableSimulation: false
               },
 

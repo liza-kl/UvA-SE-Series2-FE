@@ -4,7 +4,7 @@ import { TableViewChart } from './TableViewChart';
 export const FileOverview = ({ data }) => {
   return (
     <>
-      <Text h2>Files with most clones</Text>
+      <Text h2>Files with most Duplicate connections</Text>
       <TableViewChart data={data} />
     </>
   );

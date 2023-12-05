@@ -5,8 +5,10 @@ import { DependencyWheelChart } from '../components/DependencyWheelChart';
 import { FileHandling } from '../components/FileHandling';
 import { HowToBlock } from '../components/HowToBlock';
 import { NoFileUploaded } from '../components/NoFileUploaded';
+import { RawCloneClassTable } from '../components/RawCloneClassTable';
 import { TableViewChart } from '../components/TableViewChart';
 import {
+  getDetailedCloneClasses,
   getPackedBubbleData,
   getProjectOverviewData,
   parseProjectData,
@@ -68,7 +70,10 @@ export const Home = () => {
   };
 
   const isProjectDataSet = localStorage.getItem('currentFile') != null;
-  const projectData = parseProjectData(localStorage.getItem('currentFile'));
+  const projectData =
+    isProjectDataSet && parseProjectData(localStorage.getItem('currentFile'));
+  const detailedCloneClass = getDetailedCloneClasses(projectData);
+  console.log('detialed', detailedCloneClass);
   return (
     <Page>
       <Text h1>Clone Visualization</Text>
@@ -121,6 +126,9 @@ export const Home = () => {
           ) : (
             <NoFileUploaded />
           )}
+        </Tabs.Item>
+        <Tabs.Item label="Treemap" value="5">
+          <RawCloneClassTable cloneClasses={detailedCloneClass} />
         </Tabs.Item>
       </Tabs>
     </Page>

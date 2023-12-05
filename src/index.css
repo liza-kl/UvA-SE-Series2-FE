@@ -7,3 +7,7 @@
   stroke-width: 1;
   stroke: #5a5a5a;
 }
+
+h3 {
+  font-size: 0.85rem !important;
+}

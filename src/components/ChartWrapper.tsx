@@ -26,6 +26,14 @@ export const ChartWrapper = ({
 }: ChartWrapperProps) => {
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
 
+  const data2 = [
+    { name: 'Parent 1', value: 20 },
+    { name: 'Child 1.1', value: 10, parent: 'Parent 1' },
+    { name: 'Child 1.2', value: 10, parent: 'Parent 1' },
+    { name: 'Parent 2', value: 30 },
+    { name: 'Child 2.1', value: 15, parent: 'Parent 2' },
+    { name: 'Child 2.2', value: 15, parent: 'Parent 2' }
+  ];
   const genericChartOptions = {
     chart: {
       animation: false,
@@ -40,7 +48,16 @@ export const ChartWrapper = ({
       pointFormat: '<b>{point.name}:</b> {point.y}</sub>'
     },
     /* @ts-ignore */
-    series: data.data
+    series: [
+      [
+        {
+          data: data2
+        }
+      ],
+      {
+        data: data2
+      }
+    ]
   };
   return (
     <HighchartsReact

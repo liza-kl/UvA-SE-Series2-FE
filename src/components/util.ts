@@ -11,7 +11,7 @@ export const CloneTypeColor: Map<CloneTypes, string> = new Map([
 
 type NodeID = string;
 
-type NodeItem = {
+export type NodeItem = {
   [x: string]: any;
   id: NodeID;
   filePath: string;
@@ -75,6 +75,40 @@ function getAllTwoElementTuples(arr) {
 function extractKeyValues(array, key) {
   return array.map((obj) => obj[key]);
 }
+
+export const getCloneClasses = (data: ProjectData): string[] => {
+  if (data == undefined) return;
+  const cloneClasses: string[] = [];
+  data.clonePairs.map((elem) => {
+    cloneClasses.push(extractKeyValues(elem, 'id'));
+  });
+  return cloneClasses;
+};
+
+export const getFlatClonePairs = (data: ProjectData): any[] => {
+  if (data.clonePairs == undefined) return;
+  return data.clonePairs.flat();
+};
+
+export const getDetailedCloneClasses = (data: ProjectData): NodeItem[] => {
+  if (data == undefined) return;
+  return data.clonePairs;
+};
+// export const getDetailedCloneClasses = (
+//   idPairs: string[][],
+//   allCloneInformation: any[]
+// ) => {
+//   const detailedCloneClasses: any[] = [];
+//   idPairs.map((id) => {
+//     let cloneClass: any[] = [];
+//     id.map((idOne) =>
+//       cloneClass.push(allCloneInformation.filter((elem) => elem.id == idOne))
+//     );
+//     detailedCloneClasses.push(cloneClass);
+//   });
+
+//   return detailedCloneClasses;
+// };
 
 export const prepareDataForDepWheel = (
   data: ProjectData
