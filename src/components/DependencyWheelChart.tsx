@@ -187,13 +187,26 @@ export const DependencyWheelChart = ({ data }) => {
       {showOverview && <FileOverview data={overviewTableValues} />}
       {showTable && (
         <>
-          <Text h2>Clones in Detail</Text>
-          {tableValues.map((value, idx) => (
-            <>
-              <Text h3>Clone #{idx + 1}</Text>
-              <TableViewChart data={value} key={idx} />
-            </>
-          ))}
+          <Text h2>Clonepair in Detail</Text>
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'nowrap',
+              justifyContent: 'space-between'
+            }}
+          >
+            {tableValues.map((value, idx) => (
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column'
+                }}
+              >
+                <Text h3>Clone #{idx + 1}</Text>
+                <TableViewChart data={value} key={idx} />
+              </div>
+            ))}
+          </div>
         </>
       )}
     </>

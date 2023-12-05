@@ -17,9 +17,6 @@ export const TableViewChart = ({ data }: TableViewChartProps) => {
     <Table data={data}>
       <Table.Column prop="property" label="property" />
       <Table.Column prop="value" label="value" />
-      {/* {descriptionNeeded() && ( */}
-      <Table.Column prop="description" label="description" />
-      {/* )} */}
     </Table>
   );
 };
