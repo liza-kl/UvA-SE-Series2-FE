@@ -27,6 +27,7 @@ export const DependencyWheelChart = ({ data }) => {
 
   useEffect(() => {
     let nodeScores = [];
+    /* @ts-ignore */
     chartComponentRef.current.chart.series[0].nodes.map((elem) => {
       nodeScores.push({
         file: elem['id'],
