@@ -1,4 +1,12 @@
-import { Button, Code, Collapse, Link, Table, Tooltip } from '@geist-ui/core';
+import {
+  Button,
+  ButtonGroup,
+  Code,
+  Collapse,
+  Link,
+  Table,
+  Tooltip
+} from '@geist-ui/core';
 import * as React from 'react';
 import { useState } from 'react';
 import { NodeItem } from './util';
@@ -29,6 +37,19 @@ const getCodeComponent = (cloneClass, idx, i, setI) => {
       style={{ width: '100%', borderTop: '0', borderBottom: '0' }}
     >
       <>
+        <ButtonGroup scale={2 / 3}>
+          <Button scale={2 / 3} disabled={i == 0} onClick={() => setI(i - 1)}>
+            Show Previous Clone
+          </Button>
+          <Button
+            scale={2 / 3}
+            type="success"
+            disabled={i == cloneClass.length - 1}
+            onClick={() => setI(i + 1)}
+          >
+            Show Next Clone
+          </Button>
+        </ButtonGroup>
         <Code
           block
           name={`${getOnlyFileName(cloneClass[i].filePath)}:${
@@ -37,15 +58,6 @@ const getCodeComponent = (cloneClass, idx, i, setI) => {
         >
           {atob(cloneClass[i].base64Content)}
         </Code>
-        <Button disabled={i == 0} onClick={() => setI(i - 1)}>
-          Show Previous Clone
-        </Button>
-        <Button
-          disabled={i == cloneClass.length - 1}
-          onClick={() => setI(i + 1)}
-        >
-          Show Next Clone
-        </Button>
       </>
     </Collapse>
   );
