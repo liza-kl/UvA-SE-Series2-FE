@@ -34,7 +34,7 @@ const getCodeComponent = (cloneClass, idx, i, setI) => {
     <Collapse
       key={idx}
       title={`${idx.toString()} – Expand for example clone`}
-      style={{ width: '100%', borderTop: '0', borderBottom: '0' }}
+      style={{ borderTop: '0', borderBottom: '0' }}
     >
       <>
         <ButtonGroup scale={2 / 3}>
@@ -52,9 +52,8 @@ const getCodeComponent = (cloneClass, idx, i, setI) => {
         </ButtonGroup>
         <Code
           block
-          name={`${getOnlyFileName(cloneClass[i].filePath)}:${
-            cloneClass[i].startLine
-          }:${cloneClass[i].endLine}`}
+          name={getVSCodeLinkComponent(cloneClass[i], false)}
+          width={50}
         >
           {atob(cloneClass[i].base64Content)}
         </Code>
@@ -63,6 +62,31 @@ const getCodeComponent = (cloneClass, idx, i, setI) => {
   );
 };
 
+const getVSCodeLinkComponent = (elem: NodeItem, toolTip: boolean = false) => {
+  return (
+    <React.Fragment>
+      <Link
+        style={{ display: 'block', padding: '4px' }}
+        key={elem.filePath}
+        target="_blank"
+        href={
+          'vscode://file' + elem.filePath + ':' + elem.startLine + ':' + '1'
+        }
+        icon
+        color
+      >
+        {toolTip ? (
+          <Tooltip text={elem.filePath}>
+            {getOnlyFileName(elem.filePath)}:{elem.startLine}:{elem.endLine}
+          </Tooltip>
+        ) : (
+          `${getOnlyFileName(elem.filePath)}:${elem.startLine}:${elem.endLine}`
+        )}
+      </Link>
+      {/* Add line break except for the last element */}
+    </React.Fragment>
+  );
+};
 const getCloneClassCells = (cloneClasses: NodeItem[]): RawCloneClassCell[] => {
   const data: RawCloneClassCell[] = [];
 
@@ -72,30 +96,7 @@ const getCloneClassCells = (cloneClasses: NodeItem[]): RawCloneClassCell[] => {
     data.push({
       cloneClassID: getCodeComponent(cloneClass, idx, i, setI),
       numFiles: cloneClass.map((elem) => {
-        return (
-          <React.Fragment>
-            <Link
-              style={{ display: 'block', padding: '4px' }}
-              key={elem.filePath}
-              target="_blank"
-              href={
-                'vscode://file' +
-                elem.filePath +
-                ':' +
-                elem.startLine +
-                ':' +
-                '1'
-              }
-              icon
-              color
-            >
-              <Tooltip text={elem.filePath}>
-                {getOnlyFileName(elem.filePath)}:{elem.startLine}:{elem.endLine}
-              </Tooltip>
-            </Link>
-            {/* Add line break except for the last element */}
-          </React.Fragment>
-        );
+        return getVSCodeLinkComponent(elem, true);
       }),
       duplicatedLines: cloneClass.map((elem) => {
         Number(elem.endLine) - Number(elem.startLine);
@@ -111,8 +112,8 @@ export const RawCloneClassTable = ({
   const data = getCloneClassCells(cloneClasses);
   return (
     <Table data={data}>
-      <Table.Column prop="cloneClassID" label="Clone Class ID" width={30} />
-      <Table.Column prop="numFiles" label="Contained Locations" width={20} />
+      <Table.Column prop="cloneClassID" label="Clone Class ID" width={50} />
+      <Table.Column prop="numFiles" label="Contained Locations" width={50} />
     </Table>
   );
 };
