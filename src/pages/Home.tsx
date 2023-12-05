@@ -73,7 +73,6 @@ export const Home = () => {
   const projectData =
     isProjectDataSet && parseProjectData(localStorage.getItem('currentFile'));
   const detailedCloneClass = getDetailedCloneClasses(projectData);
-  console.log('detialed', detailedCloneClass);
   return (
     <Page>
       <Text h1>Clone Visualization</Text>
