@@ -113,22 +113,27 @@ export const Home = () => {
             <NoFileUploaded />
           )}
         </Tabs.Item>
-        <Tabs.Item label="Circle Visualization" value="3">
+        <Tabs.Item label="Clone Class Table" value="3">
+          {isProjectDataSet ? (
+            <RawCloneClassTable cloneClasses={detailedCloneClass} />
+          ) : (
+            <NoFileUploaded />
+          )}
+        </Tabs.Item>
+
+        <Tabs.Item label="Circle Visualization" value="4">
           {isProjectDataSet ? (
             <CircleViewChart data={getPackedBubbleData(projectData)} />
           ) : (
             <NoFileUploaded />
           )}
         </Tabs.Item>
-        <Tabs.Item label="Dependency Wheel Visualization" value="4">
+        <Tabs.Item label="Dependency Wheel Visualization" value="5">
           {isProjectDataSet ? (
             <DependencyWheelChart data={prepareDataForDepWheel(projectData)} />
           ) : (
             <NoFileUploaded />
           )}
-        </Tabs.Item>
-        <Tabs.Item label="Treemap" value="5">
-          <RawCloneClassTable cloneClasses={detailedCloneClass} />
         </Tabs.Item>
       </Tabs>
     </Page>
