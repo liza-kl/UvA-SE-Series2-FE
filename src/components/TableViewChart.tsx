@@ -10,16 +10,16 @@ type TableViewChartProps = {
 };
 
 export const TableViewChart = ({ data }: TableViewChartProps) => {
-  const descriptionNeeded = (): boolean => {
-    return data.some((elem) => elem.description != undefined);
-  };
+  // const descriptionNeeded = (): boolean => {
+  //   return data.some((elem) => elem.description != undefined);
+  // };
   return (
     <Table data={data}>
       <Table.Column prop="property" label="property" />
       <Table.Column prop="value" label="value" />
-      {descriptionNeeded() && (
-        <Table.Column prop="description" label="description" />
-      )}
+      {/* {descriptionNeeded() && ( */}
+      <Table.Column prop="description" label="description" />
+      {/* )} */}
     </Table>
   );
 };

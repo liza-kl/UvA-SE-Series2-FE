@@ -1,10 +1,11 @@
-import { Code, Link, Text } from '@geist-ui/core';
+import { Button, Code, Link, Text } from '@geist-ui/core';
 import * as Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import HC_more from 'highcharts/highcharts-more'; //module
 import dependencywheel from 'highcharts/modules/dependency-wheel.js'; //module
 import sankey from 'highcharts/modules/sankey.js';
 import { useEffect, useRef, useState } from 'react';
+import { FileOverview } from './FileOverview';
 import { TableRowProps, TableViewChart } from './TableViewChart';
 
 // Load Highcharts modules
@@ -16,10 +17,35 @@ export const DependencyWheelChart = ({ data }) => {
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
   const [showTable, setShowTable] = useState(false);
   const [tableValues, setTableValues] = useState<TableRowProps[][]>();
+  const [showOverview, setShowOverview] = useState<boolean>(true);
+  const [overviewTableValues, setOverviewTableValues] =
+    useState<TableRowProps[]>();
 
   useEffect(() => {
     setTableValues(tableValues);
   }, [tableValues]);
+
+  useEffect(() => {
+    let nodeScores = [];
+    chartComponentRef.current.chart.series[0].nodes.map((elem) => {
+      nodeScores.push({
+        file: elem['id'],
+        duplicatedLines: elem['sum']
+      });
+    });
+
+    nodeScores.sort((a, b) => b.duplicatedLines - a.duplicatedLines);
+
+    setOverviewTableValues(
+      nodeScores.map((nodeScore) => {
+        return {
+          property: nodeScore.file,
+          value: nodeScore.duplicatedLines
+        };
+      })
+    );
+    setShowOverview(true);
+  }, []);
 
   const chartOptions = {
     chart: {
@@ -38,53 +64,86 @@ export const DependencyWheelChart = ({ data }) => {
       dependencywheel: {
         // shared options for all dependencywheel series
         allowPointSelect: true,
+        point: {
+          events: {
+            click: function () {
+              if (this.formatPrefix == 'point') {
+                setShowOverview(false);
+                setTableValues([
+                  [
+                    {
+                      property: 'Clone Location',
+                      value: (
+                        <Link
+                          target="_blank"
+                          href={
+                            'vscode://file' +
+                            this.from +
+                            ':' +
+                            this.fromLine +
+                            ':' +
+                            '1'
+                          }
+                          icon
+                          color
+                        >
+                          {this.from}
+                        </Link>
+                      )
+                    },
+                    {
+                      property: 'Code Lines',
+                      value: this.fromLines
+                    },
+                    {
+                      property: 'clone content',
+                      value: <Code block>{this.fromClone}</Code>
+                    }
+                  ],
+                  [
+                    {
+                      property: 'Clone Location',
+                      value: (
+                        <Link
+                          target="_blank"
+                          href={
+                            'vscode://file' +
+                            this.to +
+                            ':' +
+                            this.toLine +
+                            ':' +
+                            '1'
+                          }
+                          icon
+                          color
+                        >
+                          {this.to}
+                        </Link>
+                      )
+                    },
+                    {
+                      property: 'Code Lines',
+                      value: this.toLines
+                    },
+                    {
+                      property: 'clone content',
+                      value: <Code block>{this.toClone}</Code>
+                    }
+                  ]
+                ]);
+                setShowTable(true);
+              }
 
-          point: {
-            events: {
-              click:  function ()  {
-                
-                setTableValues([[
-                {
-                  property: 'Clone Location',
-                  value: <Link target="_blank" href={'vscode://file' + this.from + ":" + this.fromLine + ":" + "1"} icon color>{this.from}</Link>
-                },
-                {
-                  property: 'Code Lines',
-                  value: this.fromLines
-                },
-                {
-                  property: 'clone content',
-                  value: <Code block>{this.fromClone}</Code>
-                },
-               
-              ],
-              [
-                {
-                  property: 'Clone Location',
-                  value: <Link target="_blank" href={'vscode://file' + this.to + ":" + this.toLine + ":" + "1"} icon color>{this.to}</Link>
-                },
-                {
-                  property: 'Code Lines',
-                  value: this.toLines
-                },
-                {
-                  property: 'clone content',
-                  value: <Code block>{this.toClone}</Code>
-                },
-               
-              ]]);
-              setShowTable(true);
-            
-            
+              if (this.formatPrefix == 'node') {
+                setShowOverview(false);
+              }
             }
-            }
-          },
+          }
+        },
         series: {
-          lineWidth: 1,
+          lineWidth: 1
         }
       }
-
-      
     },
 
     series: [
@@ -113,13 +172,29 @@ export const DependencyWheelChart = ({ data }) => {
         options={chartOptions}
         ref={chartComponentRef}
       />
-     {showTable && <><Text>Clones in Detail</Text>
-     {tableValues.map((value, idx) => 
-     <>
-     <Text h3>Clone #{idx + 1}</Text>
-     <TableViewChart data={value} key={idx}/>
-     </>)}
-     </>}
+      <Button
+        auto
+        scale={2 / 3}
+        onClick={() => {
+          setShowTable(false);
+          setShowOverview(true);
+        }}
+      >
+        Go to overview
+      </Button>
+
+      {showOverview && <FileOverview data={overviewTableValues} />}
+      {showTable && (
+        <>
+          <Text h2>Clones in Detail</Text>
+          {tableValues.map((value, idx) => (
+            <>
+              <Text h3>Clone #{idx + 1}</Text>
+              <TableViewChart data={value} key={idx} />
+            </>
+          ))}
+        </>
+      )}
     </>
   );
 };
