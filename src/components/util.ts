@@ -94,21 +94,20 @@ export const getDetailedCloneClasses = (data: ProjectData): NodeItem[] => {
   if (data == undefined) return;
   return data.clonePairs;
 };
-// export const getDetailedCloneClasses = (
-//   idPairs: string[][],
-//   allCloneInformation: any[]
-// ) => {
-//   const detailedCloneClasses: any[] = [];
-//   idPairs.map((id) => {
-//     let cloneClass: any[] = [];
-//     id.map((idOne) =>
-//       cloneClass.push(allCloneInformation.filter((elem) => elem.id == idOne))
-//     );
-//     detailedCloneClasses.push(cloneClass);
-//   });
 
-//   return detailedCloneClasses;
-// };
+export const getPossibleConnections = (data: ProjectData) => {
+  const nodeConnections = [];
+  data.clonePairs.map((elem) => {
+    const keyValues = extractKeyValues(elem, 'id');
+    const possiblePairs = getAllTwoElementTuples(keyValues);
+    possiblePairs.map((possiblePair) => {
+      const firstElem = elem.find((clone) => clone.id == possiblePair[0]);
+      const secondElem = elem.find((clone) => clone.id == possiblePair[1]);
+      nodeConnections.push([firstElem.filePath, secondElem.filePath]);
+    });
+  });
+  return nodeConnections;
+};
 
 export const prepareDataForDepWheel = (
   data: ProjectData
@@ -200,46 +199,4 @@ export const getProjectOverviewData = (
       value: !isProjectDataSet ? 'n/a' : projectData.biggestCloneClass
     }
   ];
-};
-
-export const getPackedBubbleData = (data: ProjectData) => {
-  if (data == null) return;
-  const flattenedNodes = data.clonePairs.flat();
-
-  const locationBuckets: Map<string, any[]> = new Map();
-  flattenedNodes.map((elem) => {
-    let lastIndex = elem.filePath.lastIndexOf('/');
-    let result = elem.filePath;
-    let methodName = elem.methodName.split('/');
-
-    if (locationBuckets.has(result)) {
-      locationBuckets.get(result).push({
-        name: methodName[methodName.length - 1],
-        filePath: elem.filePath,
-        value: elem.methodLOC,
-        startLine: elem.startLine,
-        endLine: elem.endLine,
-        methodLOC: elem.methodLOC,
-        loc: elem.filePath
-      });
-    } else {
-      locationBuckets.set(result, [elem]);
-    }
-  });
-
-  const directory = [];
-
-  const directoryNodes = () => {
-    locationBuckets.forEach((value, key, map) => {
-      directory.push({
-        name: key,
-        data: value
-      });
-    });
-  };
-
-  // Call the function to populate the directory array
-  directoryNodes();
-
-  return directory;
 };

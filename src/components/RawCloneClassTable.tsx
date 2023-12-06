@@ -21,7 +21,7 @@ type RawCloneClassCell = {
   duplicatedLines: any;
 };
 
-const getOnlyFileName = (fullPath: string) => {
+export const getOnlyFileName = (fullPath: string) => {
   const path = fullPath;
   const lastIndex = path.lastIndexOf('/');
   const result = path.substring(lastIndex + 1);

@@ -3,11 +3,13 @@ import { useEffect, useState } from 'react';
 import { DependencyWheelChart } from '../components/DependencyWheelChart';
 import { FileHandling } from '../components/FileHandling';
 import { HowToBlock } from '../components/HowToBlock';
+import { NetworkGraph } from '../components/NetworkGraph';
 import { NoFileUploaded } from '../components/NoFileUploaded';
 import { RawCloneClassTable } from '../components/RawCloneClassTable';
 import { TableViewChart } from '../components/TableViewChart';
 import {
   getDetailedCloneClasses,
+  getPossibleConnections,
   getProjectOverviewData,
   parseProjectData,
   prepareDataForDepWheel
@@ -22,7 +24,6 @@ export const Home = () => {
     }
     setIsFilePresent(false);
   }, [isFilePresent]);
-
   const handleResultUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const fileReader = new FileReader();
     fileReader.readAsText(event.target.files[0], 'UTF-8');
@@ -40,7 +41,6 @@ export const Home = () => {
     /* @ts-ignore */
     formInput.value = null;
   };
-
   const handleResetOfCloneResults = () => {
     if (localStorage.getItem('currentFile') == null) {
       console.warn('No file to reset');
@@ -70,7 +70,11 @@ export const Home = () => {
   const isProjectDataSet = localStorage.getItem('currentFile') != null;
   const projectData =
     isProjectDataSet && parseProjectData(localStorage.getItem('currentFile'));
+
   const detailedCloneClass = getDetailedCloneClasses(projectData);
+  const depWheelData = prepareDataForDepWheel(projectData);
+  const networkData = getPossibleConnections(projectData);
+  console.log('netowrk', networkData);
   return (
     <Page>
       <Text h1>Clone Visualization</Text>
@@ -119,7 +123,14 @@ export const Home = () => {
         </Tabs.Item>
         <Tabs.Item label="Dependency Wheel Visualization" value="4">
           {isProjectDataSet ? (
-            <DependencyWheelChart data={prepareDataForDepWheel(projectData)} />
+            <DependencyWheelChart data={depWheelData} />
+          ) : (
+            <NoFileUploaded />
+          )}
+        </Tabs.Item>
+        <Tabs.Item label="Network Graph" value="5">
+          {isProjectDataSet ? (
+            <NetworkGraph data={networkData} />
           ) : (
             <NoFileUploaded />
           )}
