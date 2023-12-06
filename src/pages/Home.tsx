@@ -121,16 +121,16 @@ export const Home = () => {
             <NoFileUploaded />
           )}
         </Tabs.Item>
-        <Tabs.Item label="Dependency Wheel Visualization" value="4">
+        <Tabs.Item label="Network Graph" value="4">
           {isProjectDataSet ? (
-            <DependencyWheelChart data={depWheelData} />
+            <NetworkGraph data={networkData} />
           ) : (
             <NoFileUploaded />
           )}
         </Tabs.Item>
-        <Tabs.Item label="Network Graph" value="5">
+        <Tabs.Item label="Dependency Wheel Visualization" value="5">
           {isProjectDataSet ? (
-            <NetworkGraph data={networkData} />
+            <DependencyWheelChart data={depWheelData} />
           ) : (
             <NoFileUploaded />
           )}
