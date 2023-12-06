@@ -1,6 +1,5 @@
 import { Button, Page, Tabs, Text, useToasts } from '@geist-ui/core';
 import { useEffect, useState } from 'react';
-import { CircleViewChart } from '../components/CircleViewChart';
 import { DependencyWheelChart } from '../components/DependencyWheelChart';
 import { FileHandling } from '../components/FileHandling';
 import { HowToBlock } from '../components/HowToBlock';
@@ -9,7 +8,6 @@ import { RawCloneClassTable } from '../components/RawCloneClassTable';
 import { TableViewChart } from '../components/TableViewChart';
 import {
   getDetailedCloneClasses,
-  getPackedBubbleData,
   getProjectOverviewData,
   parseProjectData,
   prepareDataForDepWheel
@@ -119,15 +117,7 @@ export const Home = () => {
             <NoFileUploaded />
           )}
         </Tabs.Item>
-
-        <Tabs.Item label="Circle Visualization" value="4">
-          {isProjectDataSet ? (
-            <CircleViewChart data={getPackedBubbleData(projectData)} />
-          ) : (
-            <NoFileUploaded />
-          )}
-        </Tabs.Item>
-        <Tabs.Item label="Dependency Wheel Visualization" value="5">
+        <Tabs.Item label="Dependency Wheel Visualization" value="4">
           {isProjectDataSet ? (
             <DependencyWheelChart data={prepareDataForDepWheel(projectData)} />
           ) : (
