@@ -1,3 +1,5 @@
+import { getOnlyFileName } from './RawCloneClassTable';
+
 enum CloneTypes {
   TYPE_1 = 'Type 1',
   TYPE_2 = 'Type 2',
@@ -103,7 +105,10 @@ export const getPossibleConnections = (data: ProjectData) => {
     possiblePairs.map((possiblePair) => {
       const firstElem = elem.find((clone) => clone.id == possiblePair[0]);
       const secondElem = elem.find((clone) => clone.id == possiblePair[1]);
-      nodeConnections.push([firstElem.filePath, secondElem.filePath]);
+      nodeConnections.push([
+        getOnlyFileName(firstElem.filePath),
+        getOnlyFileName(secondElem.filePath)
+      ]);
     });
   });
   return nodeConnections;

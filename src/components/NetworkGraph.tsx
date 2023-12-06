@@ -1,12 +1,32 @@
 import { ChartWrapper } from './ChartWrapper';
 
 export const NetworkGraph = ({ data }) => {
-  console.log('graph data', data);
   return (
     <ChartWrapper
       data={[data]}
       chartType="networkgraph"
       customChartOptions={{
+        tooltip: {
+          formatter: function () {
+            let connections = [];
+
+            data.map((elem) => {
+              elem.includes(this.key) && connections.push(elem);
+            });
+
+            let flatConnections = connections.flat();
+            let withoutDups = flatConnections.filter(
+              (item, index) =>
+                flatConnections.indexOf(item) === index && item !== this.key
+            );
+            let joined = withoutDups.join(',');
+
+            return (
+              '<b>' + this.key + '</b>: ' + 'exchanges clones with ' + joined
+            );
+          }
+        },
+
         plotOptions: {
           networkgraph: {
             keys: ['from', 'to'],
@@ -21,7 +41,7 @@ export const NetworkGraph = ({ data }) => {
         series: [
           {
             marker: {
-              radius: 13
+              radius: 20
             },
             dataLabels: {
               enabled: true,
