@@ -52,6 +52,7 @@ const getCodeComponent = (cloneClass, idx, i, setI) => {
         </ButtonGroup>
         <Code
           block
+          /* @ts-ignore */
           name={getVSCodeLinkComponent(cloneClass[i], false)}
           width={50}
         >
