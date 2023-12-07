@@ -71,10 +71,11 @@ export const Home = () => {
   const projectData =
     isProjectDataSet && parseProjectData(localStorage.getItem('currentFile'));
 
-  const detailedCloneClass = getDetailedCloneClasses(projectData);
-  const depWheelData = prepareDataForDepWheel(projectData);
-  const networkData = getPossibleConnections(projectData);
-  console.log('netowrk', networkData);
+  const detailedCloneClass =
+    isProjectDataSet && getDetailedCloneClasses(projectData);
+  const depWheelData = isProjectDataSet && prepareDataForDepWheel(projectData);
+  const networkData = isProjectDataSet && getPossibleConnections(projectData);
+
   return (
     <Page>
       <Text h1>Clone Visualization</Text>
