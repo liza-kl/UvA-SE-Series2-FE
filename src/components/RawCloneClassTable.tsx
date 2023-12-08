@@ -29,81 +29,114 @@ export const getOnlyFileName = (fullPath: string) => {
   return result;
 };
 
-const getCodeComponent = (cloneClass, idx, i, setI) => {
-  return (
-    <Collapse
-      key={idx}
-      title={`${idx.toString()} – Expand for example clone`}
-      style={{ borderTop: '0', borderBottom: '0' }}
-    >
-      <>
-        <ButtonGroup scale={2 / 3}>
-          <Button scale={2 / 3} disabled={i == 0} onClick={() => setI(i - 1)}>
-            Show Previous Clone
-          </Button>
-          <Button
-            scale={2 / 3}
-            type="success"
-            disabled={i == cloneClass.length - 1}
-            onClick={() => setI(i + 1)}
-          >
-            Show Next Clone
-          </Button>
-        </ButtonGroup>
-        <Code
-          block
-          /* @ts-ignore */
-          name={getVSCodeLinkComponent(cloneClass[i], false)}
-          width={50}
-        >
-          {atob(cloneClass[i].base64Content)}
-        </Code>
-      </>
-    </Collapse>
-  );
-};
-
 const getVSCodeLinkComponent = (elem: NodeItem, toolTip: boolean = false) => {
   return (
-    <React.Fragment>
-      <Link
-        style={{ display: 'block', padding: '4px' }}
-        key={elem.filePath}
-        target="_blank"
-        href={
-          'vscode://file' + elem.filePath + ':' + elem.startLine + ':' + '1'
-        }
-        icon
-        color
-      >
-        {toolTip ? (
-          <Tooltip text={elem.filePath}>
-            {getOnlyFileName(elem.filePath)}:{elem.startLine}:{elem.endLine}
-          </Tooltip>
-        ) : (
-          `${getOnlyFileName(elem.filePath)}:${elem.startLine}:${elem.endLine}`
-        )}
-      </Link>
-      {/* Add line break except for the last element */}
-    </React.Fragment>
+    elem != undefined && (
+      <React.Fragment>
+        <Link
+          style={{ display: 'block', padding: '4px' }}
+          key={elem.filePath}
+          target="_blank"
+          href={
+            'vscode://file' + elem.filePath + ':' + elem.startLine + ':' + '1'
+          }
+          icon
+          color
+        >
+          {toolTip ? (
+            <Tooltip text={elem.filePath}>
+              {getOnlyFileName(elem.filePath)}:{elem.startLine}:{elem.endLine}
+            </Tooltip>
+          ) : (
+            `${getOnlyFileName(elem.filePath)}:${elem.startLine}:${
+              elem.endLine
+            }`
+          )}
+        </Link>
+        {/* Add line break except for the last element */}
+      </React.Fragment>
+    )
   );
 };
+
 const getCloneClassCells = (cloneClasses: NodeItem[]): RawCloneClassCell[] => {
   const data: RawCloneClassCell[] = [];
+  const cloneClassMap = new Map<number, number>([]);
 
-  const [i, setI] = useState(0);
+  const [enhancedI, setEnhancedI] = useState<any>(
+    cloneClasses.map((_, idx) => {
+      cloneClassMap.set(idx, 0);
+      setEnhancedI(cloneClassMap);
+    })
+  );
 
-  cloneClasses.map((cloneClass, idx) => {
-    data.push({
-      cloneClassID: getCodeComponent(cloneClass, idx, i, setI),
-      numFiles: cloneClass.map((elem) => {
-        return getVSCodeLinkComponent(elem, true);
-      }),
-      duplicatedLines: cloneClass.map((elem) => {
-        Number(elem.endLine) - Number(elem.startLine);
-      })
+  const updateCollapseIndex = (value, idx) => {
+    setEnhancedI((prevList) => {
+      console.log('prev lit', prevList);
+      const updatedValues = new Map(prevList);
+      updatedValues.set(idx, updatedValues.get(idx) + value);
+      console.log('updated list', updatedValues);
     });
-  });
+  };
+
+  React.useEffect(() => {
+    cloneClasses.map((_, idx) => {
+      cloneClassMap.set(idx, 0);
+      setEnhancedI(cloneClassMap);
+    });
+  }, []);
+
+  console.log(enhancedI);
+  enhancedI != undefined &&
+    cloneClasses.map((cloneClass, idx) => {
+      console.log(cloneClass[enhancedI.get(idx)]);
+      cloneClass[enhancedI.get(idx)] != undefined &&
+        data.push({
+          cloneClassID: (
+            <Collapse
+              key={idx}
+              title={`${idx.toString()} – Expand for example clone`}
+              style={{ borderTop: '0', borderBottom: '0' }}
+            >
+              <>
+                <ButtonGroup scale={2 / 3}>
+                  <Button
+                    scale={2 / 3}
+                    onClick={() => updateCollapseIndex(-1, idx)}
+                    disabled={enhancedI.get(idx) == 0}
+                  >
+                    Show Previous Clone
+                  </Button>
+                  <Button
+                    scale={2 / 3}
+                    type="success"
+                    disabled={enhancedI.get(idx) == cloneClass.length - 1}
+                    onClick={() => updateCollapseIndex(1, idx)}
+                  >
+                    Show Next Clone
+                  </Button>
+                </ButtonGroup>
+                <Code
+                  block
+                  name={getVSCodeLinkComponent(
+                    cloneClass[enhancedI.get(idx)],
+                    false
+                  )}
+                  width={50}
+                >
+                  {atob(cloneClass[enhancedI.get(idx)].base64Content)}
+                </Code>
+              </>
+            </Collapse>
+          ),
+          numFiles: cloneClass.map((elem) => {
+            return getVSCodeLinkComponent(elem, true);
+          }),
+          duplicatedLines: cloneClass.map((elem) => {
+            Number(elem.endLine) - Number(elem.startLine);
+          })
+        });
+    });
   return data;
 };
 
