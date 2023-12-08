@@ -61,35 +61,34 @@ const getVSCodeLinkComponent = (elem: NodeItem, toolTip: boolean = false) => {
 
 const getCloneClassCells = (cloneClasses: NodeItem[]): RawCloneClassCell[] => {
   const data: RawCloneClassCell[] = [];
-  const cloneClassMap = new Map<number, number>([]);
+  const cloneClassMap = new Map<number, number>();
 
-  const [enhancedI, setEnhancedI] = useState<any>(
-    cloneClasses.map((_, idx) => {
-      cloneClassMap.set(idx, 0);
-      setEnhancedI(cloneClassMap);
-    })
-  );
+  const [enhancedI, setEnhancedI] = useState<Map<number, number>>(() => {
+    const initialMap = new Map<number, number>();
+    cloneClasses.forEach((_, idx) => {
+      initialMap.set(idx, 0);
+    });
+    return initialMap;
+  });
 
   const updateCollapseIndex = (value, idx) => {
     setEnhancedI((prevList) => {
-      console.log('prev lit', prevList);
       const updatedValues = new Map(prevList);
       updatedValues.set(idx, updatedValues.get(idx) + value);
-      console.log('updated list', updatedValues);
+      return updatedValues; // Make sure to return the updated values
     });
   };
 
   React.useEffect(() => {
-    cloneClasses.map((_, idx) => {
-      cloneClassMap.set(idx, 0);
-      setEnhancedI(cloneClassMap);
+    const initialMap = new Map<number, number>();
+    cloneClasses.forEach((_, idx) => {
+      initialMap.set(idx, 0);
     });
+    setEnhancedI(initialMap);
   }, []);
 
-  console.log(enhancedI);
   enhancedI != undefined &&
     cloneClasses.map((cloneClass, idx) => {
-      console.log(cloneClass[enhancedI.get(idx)]);
       cloneClass[enhancedI.get(idx)] != undefined &&
         data.push({
           cloneClassID: (
