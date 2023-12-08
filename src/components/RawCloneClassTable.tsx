@@ -117,6 +117,7 @@ const getCloneClassCells = (cloneClasses: NodeItem[]): RawCloneClassCell[] => {
                 </ButtonGroup>
                 <Code
                   block
+                  /* @ts-ignore */
                   name={getVSCodeLinkComponent(
                     cloneClass[enhancedI.get(idx)],
                     false
