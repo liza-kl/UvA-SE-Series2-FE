@@ -151,7 +151,7 @@ export const DependencyWheelChart = ({ data }) => {
       {
         ...data,
         type: 'dependencywheel',
-        name: 'Duplications',
+        name: '',
         dataLabels: {
           color: '#333',
           style: {
@@ -160,7 +160,7 @@ export const DependencyWheelChart = ({ data }) => {
           textPath: {
             enabled: true
           },
-          distance: 0
+          distance: 10
         },
         size: '95%'
       }
