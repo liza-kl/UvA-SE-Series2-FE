@@ -1,4 +1,4 @@
-import { Button, Page, Tabs, Text, useToasts } from '@geist-ui/core';
+import { Page, Tabs, Text, useToasts } from '@geist-ui/core';
 import { useEffect, useState } from 'react';
 import { DependencyWheelChart } from '../components/DependencyWheelChart';
 import { FileHandling } from '../components/FileHandling';
@@ -6,6 +6,10 @@ import { HowToBlock } from '../components/HowToBlock';
 import { NetworkGraph } from '../components/NetworkGraph';
 import { NoFileUploaded } from '../components/NoFileUploaded';
 import { RawCloneClassTable } from '../components/RawCloneClassTable';
+import {
+  SampleProjectButtons,
+  SampleProjectElem
+} from '../components/SampleProjectButtons';
 import { TableViewChart } from '../components/TableViewChart';
 import {
   getDetailedCloneClasses,
@@ -76,6 +80,35 @@ export const Home = () => {
   const depWheelData = isProjectDataSet && prepareDataForDepWheel(projectData);
   const networkData = isProjectDataSet && getPossibleConnections(projectData);
 
+  const sampleProjectData: SampleProjectElem[] = [
+    {
+      sampleProjectLabel: 'Test Encyptor Project',
+      sampleProjects: [
+        {
+          btnLabel: '1',
+          btnAction: () => uploadPreset('sample_encryptor.json')
+        }
+      ]
+    },
+    {
+      sampleProjectLabel: 'Small SQL Project',
+      sampleProjects: [
+        {
+          btnLabel: '1',
+          btnAction: () => uploadPreset('sample_encryptor.json')
+        }
+      ]
+    },
+    {
+      sampleProjectLabel: 'HSQL Project',
+      sampleProjects: [
+        {
+          btnLabel: '1',
+          btnAction: () => uploadPreset('sample_hsql.json')
+        }
+      ]
+    }
+  ];
   return (
     <Page>
       <Text h1>Clone Visualization</Text>
@@ -94,16 +127,8 @@ export const Home = () => {
               onReset={handleResetOfCloneResults}
               resetLabel="Reset Current File"
             />
-            <Text>Or choose one of the sample projects below</Text>
-            <Button onClick={() => uploadPreset('sample_encryptor.json')}>
-              Test Project (Small Encryptor)
-            </Button>
-            <Button onClick={() => uploadPreset('sample_smallsql.json')}>
-              Small SQL Project
-            </Button>
-            <Button onClick={() => uploadPreset('sample_hsql.json')}>
-              HSQL Project
-            </Button>
+
+            <SampleProjectButtons projects={sampleProjectData} />
           </>
         </Tabs.Item>
         <Tabs.Item label="Project Overview" value="2">
@@ -115,20 +140,21 @@ export const Home = () => {
             <NoFileUploaded />
           )}
         </Tabs.Item>
-        <Tabs.Item label="Clone Class Table" value="3">
-          {isProjectDataSet ? (
-            <RawCloneClassTable cloneClasses={detailedCloneClass} />
-          ) : (
-            <NoFileUploaded />
-          )}
-        </Tabs.Item>
-        <Tabs.Item label="Network Graph" value="4">
+        <Tabs.Item label="Network Graph" value="3">
           {isProjectDataSet ? (
             <NetworkGraph data={networkData} />
           ) : (
             <NoFileUploaded />
           )}
         </Tabs.Item>
+        <Tabs.Item label="Clone Class Table" value="4">
+          {isProjectDataSet ? (
+            <RawCloneClassTable cloneClasses={detailedCloneClass} />
+          ) : (
+            <NoFileUploaded />
+          )}
+        </Tabs.Item>
+
         <Tabs.Item label="Dependency Wheel Visualization" value="5">
           {isProjectDataSet ? (
             <DependencyWheelChart data={depWheelData} />
