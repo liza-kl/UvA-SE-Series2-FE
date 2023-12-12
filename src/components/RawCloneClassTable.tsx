@@ -163,6 +163,7 @@ export const RawCloneClassTable = ({
 
   return (
     <>
+      {/* @ts-ignore */}
       <Input
         placeholder="Filter Files"
         width="100%"
