@@ -3,12 +3,13 @@ import {
   ButtonGroup,
   Code,
   Collapse,
+  Input,
   Link,
   Table,
   Tooltip
 } from '@geist-ui/core';
 import * as React from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NodeItem } from './util';
 
 type RawCloneClassTableProps = {
@@ -143,11 +144,37 @@ const getCloneClassCells = (cloneClasses: NodeItem[]): RawCloneClassCell[] => {
 export const RawCloneClassTable = ({
   cloneClasses
 }: RawCloneClassTableProps) => {
-  const data = getCloneClassCells(cloneClasses);
+  const initialData = getCloneClassCells(cloneClasses);
+  const [data, setData] = useState(initialData);
+  const [searchInput, setSearchInput] = useState('');
+
+  useEffect(() => {
+    const filteredData = initialData.filter((cloneClass) => {
+      const matchingFiles = cloneClass.numFiles.filter((file) =>
+        file.props.children.key
+          .toLowerCase()
+          .includes(searchInput.toLowerCase())
+      );
+      return matchingFiles.length > 0; // Include clone class if any matching files are found
+    });
+
+    setData(filteredData);
+  }, [searchInput]);
+
   return (
-    <Table data={data}>
-      <Table.Column prop="cloneClassID" label="Clone Class ID" width={50} />
-      <Table.Column prop="numFiles" label="Contained Locations" width={50} />
-    </Table>
+    <>
+      <Input
+        placeholder="Filter Files"
+        width="100%"
+        value={searchInput}
+        onChange={(e) => setSearchInput(e.target.value)}
+        mb="10px"
+      />
+
+      <Table data={data}>
+        <Table.Column prop="cloneClassID" label="Clone Class ID" width={50} />
+        <Table.Column prop="numFiles" label="Contained Locations" width={50} />
+      </Table>
+    </>
   );
 };
