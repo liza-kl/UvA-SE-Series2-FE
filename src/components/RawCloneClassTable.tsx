@@ -3,9 +3,11 @@ import {
   ButtonGroup,
   Code,
   Collapse,
+  Grid,
   Input,
   Link,
   Table,
+  Tag,
   Tooltip
 } from '@geist-ui/core';
 import * as React from 'react';
@@ -30,7 +32,11 @@ export const getOnlyFileName = (fullPath: string) => {
   return result;
 };
 
-const getVSCodeLinkComponent = (elem: NodeItem, toolTip: boolean = false) => {
+const getVSCodeLinkComponent = (
+  elem: NodeItem,
+  toolTip: boolean = false,
+  longName: boolean = false
+) => {
   return (
     elem != undefined && (
       <React.Fragment>
@@ -48,13 +54,14 @@ const getVSCodeLinkComponent = (elem: NodeItem, toolTip: boolean = false) => {
             <Tooltip text={elem.filePath}>
               {getOnlyFileName(elem.filePath)}:{elem.startLine}:{elem.endLine}
             </Tooltip>
-          ) : (
+          ) : longName == false ? (
             `${getOnlyFileName(elem.filePath)}:${elem.startLine}:${
               elem.endLine
             }`
+          ) : (
+            `${elem.filePath}:${elem.startLine}:${elem.endLine}`
           )}
         </Link>
-        {/* Add line break except for the last element */}
       </React.Fragment>
     )
   );
@@ -62,7 +69,6 @@ const getVSCodeLinkComponent = (elem: NodeItem, toolTip: boolean = false) => {
 
 const getCloneClassCells = (cloneClasses: NodeItem[]): RawCloneClassCell[] => {
   const data: RawCloneClassCell[] = [];
-  const cloneClassMap = new Map<number, number>();
 
   const [enhancedI, setEnhancedI] = useState<Map<number, number>>(() => {
     const initialMap = new Map<number, number>();
@@ -121,7 +127,8 @@ const getCloneClassCells = (cloneClasses: NodeItem[]): RawCloneClassCell[] => {
                   /* @ts-ignore */
                   name={getVSCodeLinkComponent(
                     cloneClass[enhancedI.get(idx)],
-                    false
+                    false,
+                    true
                   )}
                   width={50}
                 >
@@ -163,14 +170,28 @@ export const RawCloneClassTable = ({
 
   return (
     <>
-      {/* @ts-ignore */}
-      <Input
-        placeholder="Filter Files"
-        width="100%"
-        value={searchInput}
-        onChange={(e) => setSearchInput(e.target.value)}
-        mb="10px"
-      />
+      <Grid.Container
+        gap={2}
+        alignItems="center"
+        alignContent="center"
+        justify="space-between"
+      >
+        <Grid xs={22}>
+          {/* @ts-ignore */}
+          <Input
+            placeholder="Filter Files"
+            width="100%"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            mb="10px"
+          />
+        </Grid>
+        <Grid xs={2}>
+          <Tag type="default" invert>
+            Clone Classes: {data.length}
+          </Tag>
+        </Grid>
+      </Grid.Container>
 
       <Table data={data}>
         <Table.Column prop="cloneClassID" label="Clone Class ID" width={50} />
