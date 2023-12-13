@@ -98,7 +98,11 @@ export const DependencyWheelChart = ({ data }) => {
                     },
                     {
                       property: 'clone content',
-                      value: <Code block>{this.fromClone}</Code>
+                      value: (
+                        <Code block width="50">
+                          {this.fromClone}
+                        </Code>
+                      )
                     }
                   ],
                   [
@@ -128,7 +132,11 @@ export const DependencyWheelChart = ({ data }) => {
                     },
                     {
                       property: 'clone content',
-                      value: <Code block>{this.toClone}</Code>
+                      value: (
+                        <Code block width="50">
+                          {this.toClone}
+                        </Code>
+                      )
                     }
                   ]
                 ]);
@@ -191,7 +199,6 @@ export const DependencyWheelChart = ({ data }) => {
           <div
             style={{
               display: 'flex',
-              flexWrap: 'nowrap',
               justifyContent: 'space-between'
             }}
           >
