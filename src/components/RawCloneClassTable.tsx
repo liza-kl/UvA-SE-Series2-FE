@@ -11,7 +11,8 @@ import {
   Tooltip
 } from '@geist-ui/core';
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import useDeepCompareEffect from 'use-deep-compare-effect';
 import { NodeItem } from './util';
 
 type RawCloneClassTableProps = {
@@ -67,32 +68,12 @@ const getVSCodeLinkComponent = (
   );
 };
 
-const getCloneClassCells = (cloneClasses: NodeItem[]): RawCloneClassCell[] => {
+const getCloneClassCells = (
+  cloneClasses: NodeItem[],
+  updateCollapseIndex,
+  enhancedI
+): RawCloneClassCell[] => {
   const data: RawCloneClassCell[] = [];
-
-  const [enhancedI, setEnhancedI] = useState<Map<number, number>>(() => {
-    const initialMap = new Map<number, number>();
-    cloneClasses.forEach((_, idx) => {
-      initialMap.set(idx, 0);
-    });
-    return initialMap;
-  });
-
-  const updateCollapseIndex = (value, idx) => {
-    setEnhancedI((prevList) => {
-      const updatedValues = new Map(prevList);
-      updatedValues.set(idx, updatedValues.get(idx) + value);
-      return updatedValues; // Make sure to return the updated values
-    });
-  };
-
-  React.useEffect(() => {
-    const initialMap = new Map<number, number>();
-    cloneClasses.forEach((_, idx) => {
-      initialMap.set(idx, 0);
-    });
-    setEnhancedI(initialMap);
-  }, []);
 
   enhancedI != undefined &&
     cloneClasses.map((cloneClass, idx) => {
@@ -151,23 +132,66 @@ const getCloneClassCells = (cloneClasses: NodeItem[]): RawCloneClassCell[] => {
 export const RawCloneClassTable = ({
   cloneClasses
 }: RawCloneClassTableProps) => {
-  const initialData = getCloneClassCells(cloneClasses);
-  const [data, setData] = useState(initialData);
-  const [searchInput, setSearchInput] = useState('');
+  const [enhancedI, setEnhancedI] = useState<Map<number, number>>(() => {
+    const initialMap = new Map<number, number>();
+    cloneClasses.forEach((_, idx) => {
+      initialMap.set(idx, 0);
+    });
+    return initialMap;
+  });
 
-  useEffect(() => {
-    const filteredData = initialData.filter((cloneClass) => {
-      const matchingFiles = cloneClass.numFiles.filter((file) =>
-        file.props.children.key
-          .toLowerCase()
-          .includes(searchInput.toLowerCase())
+  const [data, setData] = useState<RawCloneClassCell[]>([]);
+  const [searchInput, setSearchInput] = useState('');
+  const [filteredData, setFilteredData] = useState<NodeItem[]>(cloneClasses);
+
+  const updateCollapseIndex = React.useCallback((value, idx) => {
+    setEnhancedI((prevList) => {
+      const updatedValues = new Map(prevList);
+      updatedValues.set(idx, updatedValues.get(idx) + value);
+      return updatedValues;
+    });
+  }, []);
+
+  const getCloneClassCellsData = React.useCallback(() => {
+    return getCloneClassCells(filteredData, updateCollapseIndex, enhancedI);
+  }, [filteredData, updateCollapseIndex, enhancedI]);
+
+  useDeepCompareEffect(() => {
+    const filteredResult = cloneClasses.filter((cloneClass) => {
+      const matchingFiles = cloneClass.filter((file) =>
+        file.filePath.toLowerCase().includes(searchInput.toLowerCase())
       );
-      return matchingFiles.length > 0; // Include clone class if any matching files are found
+      return matchingFiles.length > 0;
     });
 
-    setData(filteredData);
-  }, [searchInput]);
+    setFilteredData(filteredResult);
+  }, [searchInput, cloneClasses]);
 
+  React.useEffect(() => {
+    const initialMap = new Map<number, number>();
+    cloneClasses.forEach((_, idx) => {
+      initialMap.set(idx, 0);
+    });
+    setEnhancedI(initialMap);
+  }, [cloneClasses]);
+
+  React.useEffect(() => {
+    const initialData = getCloneClassCellsData();
+    setData(initialData);
+  }, [getCloneClassCellsData]);
+
+  React.useEffect(() => {
+    // Reset enhancedI when filtered data changes to prevent inconsistency
+    setEnhancedI((prevList) => {
+      const updatedValues = new Map(prevList);
+      filteredData.forEach((_, idx) => {
+        if (!updatedValues.has(idx)) {
+          updatedValues.set(idx, 0);
+        }
+      });
+      return updatedValues;
+    });
+  }, [filteredData]);
   return (
     <>
       <Grid.Container

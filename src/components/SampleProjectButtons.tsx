@@ -25,7 +25,7 @@ export const SampleProjectButtons = ({ projects }: SampleProjectProps) => {
       {projects.map((project) => (
         <>
           <Text h3>{project.sampleProjectLabel}</Text>
-          <ButtonGroup type="secondary">
+          <ButtonGroup type="secondary" key={project.sampleProjectLabel}>
             {project.sampleProjects.map((proj) => (
               <>
                 <Button onClick={proj.btnAction}>{proj.btnLabel}</Button>
