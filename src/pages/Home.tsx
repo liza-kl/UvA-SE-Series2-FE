@@ -89,11 +89,31 @@ export const Home = () => {
       ]
     },
     {
-      sampleProjectLabel: 'Small SQL Project',
+      sampleProjectLabel: 'Small SQL Project Type 1',
       sampleProjects: [
         {
           btnLabel: '1',
-          btnAction: () => uploadPreset('sample_encryptor.json')
+          btnAction: () => uploadPreset('sample_smallsql-type1-1.json')
+        },
+        {
+          btnLabel: '2',
+          btnAction: () => uploadPreset('sample_smallsql-type1-2.json')
+        },
+        {
+          btnLabel: '3',
+          btnAction: () => uploadPreset('sample_smallsql-type1-3.json')
+        },
+        {
+          btnLabel: '4',
+          btnAction: () => uploadPreset('sample_smallsql-type1-4.json')
+        },
+        {
+          btnLabel: '5',
+          btnAction: () => uploadPreset('sample_smallsql-type1-5.json')
+        },
+        {
+          btnLabel: '6',
+          btnAction: () => uploadPreset('sample_smallsql-type1-6.json')
         }
       ]
     },
