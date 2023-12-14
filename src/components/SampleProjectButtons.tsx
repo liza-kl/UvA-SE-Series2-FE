@@ -1,23 +1,12 @@
 import { Button, ButtonGroup, Text } from '@geist-ui/core';
-
-export interface ButtonProps {
-  btnLabel: string;
-  btnAction: () => void;
-}
-
-export type SampleProjectElem = {
-  sampleProjectLabel: string;
-  sampleProjects: ButtonProps[];
-};
-
-export interface SampleProjectProps {
-  projects: SampleProjectElem[];
-}
+import { SampleProjectProps } from './SampleProjectButtons.types';
 
 export const SampleProjectButtons = ({ projects }: SampleProjectProps) => {
   return (
     <>
-      <Text h2>Sample projects</Text>
+      <Text h2 mt={1}>
+        Sample projects
+      </Text>
       <Text p>
         Or choose one of the sample projects below (the number refers to the
         different mass thresholds)

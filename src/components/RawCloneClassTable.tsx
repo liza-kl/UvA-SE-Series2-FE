@@ -13,17 +13,11 @@ import {
 import * as React from 'react';
 import { useState } from 'react';
 import useDeepCompareEffect from 'use-deep-compare-effect';
+import {
+  RawCloneClassCell,
+  RawCloneClassTableProps
+} from './RawCloneClassTable.types';
 import { NodeItem } from './util';
-
-type RawCloneClassTableProps = {
-  cloneClasses: NodeItem[];
-};
-
-type RawCloneClassCell = {
-  cloneClassID: any;
-  numFiles: any;
-  duplicatedLines: any;
-};
 
 export const getOnlyFileName = (fullPath: string) => {
   const path = fullPath;
@@ -200,7 +194,7 @@ export const RawCloneClassTable = ({
         alignContent="center"
         justify="space-between"
       >
-        <Grid xs={22}>
+        <Grid xs={20}>
           {/* @ts-ignore */}
           <Input
             placeholder="Filter Files"
@@ -210,7 +204,7 @@ export const RawCloneClassTable = ({
             mb="10px"
           />
         </Grid>
-        <Grid xs={2}>
+        <Grid xs={4}>
           <Tag type="default" invert>
             Clone Classes: {data.length}
           </Tag>

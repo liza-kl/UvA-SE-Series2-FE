@@ -1,4 +1,4 @@
-import { Page, Tabs, Text, useToasts } from '@geist-ui/core';
+import { Page, Tabs, Tag, Text, User, useToasts } from '@geist-ui/core';
 import { useEffect, useState } from 'react';
 import { DependencyWheelChart } from '../components/DependencyWheelChart';
 import { FileHandling } from '../components/FileHandling';
@@ -6,10 +6,8 @@ import { HowToBlock } from '../components/HowToBlock';
 import { NetworkGraph } from '../components/NetworkGraph';
 import { NoFileUploaded } from '../components/NoFileUploaded';
 import { RawCloneClassTable } from '../components/RawCloneClassTable';
-import {
-  SampleProjectButtons,
-  SampleProjectElem
-} from '../components/SampleProjectButtons';
+import { SampleProjectButtons } from '../components/SampleProjectButtons';
+import { SampleProjectElem } from '../components/SampleProjectButtons.types';
 import { TableViewChart } from '../components/TableViewChart';
 import {
   getDetailedCloneClasses,
@@ -111,15 +109,39 @@ export const Home = () => {
   ];
   return (
     <Page>
-      <Text h1>Clone Visualization</Text>
-
+      <Text h1 style={{ marginLeft: '1rem', marginBottom: '1rem' }}>
+        Clone Visualization
+      </Text>
+      <div style={{ marginLeft: '1rem', marginBottom: '1rem' }}>
+        <Text span>Made with lots of ❤️, sleepless nights and pain by </Text>
+        <User
+          src="https://avatars.githubusercontent.com/u/61849425?v=4"
+          name="Denis"
+        >
+          <User.Link href="https://github.com/D45Hub/">@D45Hub</User.Link>
+        </User>
+        <User
+          src="https://avatars.githubusercontent.com/u/58568446?v=4"
+          name="Lisa"
+        >
+          <User.Link href="https://github.com/liza-kl/">@liza-kl</User.Link>
+        </User>
+        <User src="/public/rocky.webp" name="Rocky">
+          <User.Link href="https://youtu.be/7c3_57CVIu8?si=Wv7aKv6JrbVEHZAP&t=25">
+            @rocky
+          </User.Link>
+        </User>
+      </div>
       <Tabs initialValue="1">
         <Tabs.Item label="Upload File To Evaluate" value="1">
-          <>
+          <div style={{ marginLeft: '1rem' }}>
             <HowToBlock></HowToBlock>
             {isProjectDataSet && (
               <Text>
-                Current File you are working with: {projectData.projectName}
+                <Tag type="default" invert>
+                  {' '}
+                  Current File you are working with: {projectData.projectName}
+                </Tag>
               </Text>
             )}
             <FileHandling
@@ -129,7 +151,7 @@ export const Home = () => {
             />
 
             <SampleProjectButtons projects={sampleProjectData} />
-          </>
+          </div>
         </Tabs.Item>
         <Tabs.Item label="Project Overview" value="2">
           {isProjectDataSet ? (
