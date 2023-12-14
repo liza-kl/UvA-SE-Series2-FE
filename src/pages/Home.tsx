@@ -126,7 +126,7 @@ export const Home = () => {
         >
           <User.Link href="https://github.com/liza-kl/">@liza-kl</User.Link>
         </User>
-        <User src="/public/rocky.webp" name="Rocky">
+        <User src="/public/rocky.png" name="Rocky">
           <User.Link href="https://youtu.be/7c3_57CVIu8?si=Wv7aKv6JrbVEHZAP&t=25">
             @rocky
           </User.Link>
