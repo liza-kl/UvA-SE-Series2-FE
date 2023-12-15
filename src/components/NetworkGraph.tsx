@@ -19,10 +19,14 @@ export const NetworkGraph = ({ data }) => {
               (item, index) =>
                 flatConnections.indexOf(item) === index && item !== this.key
             );
-            let joined = withoutDups.join(',');
+            let joined = withoutDups.join('</p><p>');
 
             return (
-              '<b>' + this.key + '</b>: ' + 'exchanges clones with ' + joined
+              '<b>' +
+              this.key +
+              '</b>: ' +
+              'exchanges clones with <br>' +
+              joined
             );
           }
         },

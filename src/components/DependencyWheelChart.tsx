@@ -64,8 +64,8 @@ export const DependencyWheelChart = ({ data }) => {
     plotOptions: {
       dependencywheel: {
         // shared options for all dependencywheel series
-        nodeWidth: 25,
-        minLinkWidth: 10,
+        nodeWidth: 20,
+        minLinkWidth: 2,
         allowPointSelect: true,
         point: {
           events: {
@@ -160,6 +160,8 @@ export const DependencyWheelChart = ({ data }) => {
     series: [
       {
         ...data,
+        boostThreshold: 0, // Boost when there are more than 1
+        // point in the series
         type: 'dependencywheel',
         name: '',
         dataLabels: {
@@ -171,8 +173,7 @@ export const DependencyWheelChart = ({ data }) => {
             enabled: true
           },
           distance: 10
-        },
-        size: '95%'
+        }
       }
     ]
   };
