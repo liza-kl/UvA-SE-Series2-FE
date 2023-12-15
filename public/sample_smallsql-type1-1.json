@@ -2,8 +2,8 @@
     
     "projectName": "file:///Users/ekletsko/Downloads/smallsql0.21_src", 
     "projectLOC": 24050, 
-    "duplicatedLines": 516, 
-    "duplicatedLinePercentage": 2.145530146000, 
+    "duplicatedLines": 1034, 
+    "duplicatedLinePercentage": 4.299376299000, 
     "numberOfCloneClasses": 998, 
     "biggestCloneLOC": 22, 
     "biggestCloneClass": 7, 
