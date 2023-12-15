@@ -64,6 +64,8 @@ export const DependencyWheelChart = ({ data }) => {
     plotOptions: {
       dependencywheel: {
         // shared options for all dependencywheel series
+        nodeWidth: 25,
+        minLinkWidth: 10,
         allowPointSelect: true,
         point: {
           events: {

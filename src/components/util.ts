@@ -29,6 +29,7 @@ export type ProjectData = {
   projectLOC: string | number | undefined;
   duplicatedLines: string | number | undefined;
   duplicatedLinePercentage: string | number | undefined;
+  cloneType: string | number | undefined;
   numberOfCloneClasses: number | string | undefined;
   biggestCloneLOC: number | string | undefined;
   biggestCloneClass: number | string | undefined;
@@ -178,6 +179,10 @@ export const getProjectOverviewData = (
     {
       property: 'Similiraty Threshold',
       value: !isProjectDataSet ? 'n/a' : projectData.similarityThreshold
+    },
+    {
+      property: 'Clone Type',
+      value: !isProjectDataSet ? 'n/a' : projectData.cloneType
     },
     {
       property: 'Number of Lines',
