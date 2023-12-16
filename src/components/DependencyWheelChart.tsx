@@ -211,7 +211,7 @@ export const DependencyWheelChart = ({ data }) => {
                 style={{
                   display: 'flex',
                   flexBasis: '250px',
-                  wrap: 'flex-wrap',
+                  flexWrap: 'wrap',
                   flexDirection: 'column'
                 }}
               >
