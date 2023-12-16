@@ -37,7 +37,8 @@ export const NetworkGraph = ({ data }) => {
             layoutAlgorithm: {
               enableSimulation: true,
               integration: 'verlet',
-              linkLength: 100
+              maxSpeed: 1000,
+              maxIterations: 100
             }
           }
         },

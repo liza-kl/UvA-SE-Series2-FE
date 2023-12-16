@@ -101,10 +101,6 @@ export const Home = () => {
       sampleProjectLabel: 'Small SQL Project Type 1',
       sampleProjects: [
         {
-          btnLabel: '1',
-          btnAction: () => uploadPreset('sample_smallsql-type1-1.json')
-        },
-        {
           btnLabel: '2',
           btnAction: () => uploadPreset('sample_smallsql-type1-2.json')
         },
