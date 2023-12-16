@@ -136,11 +136,11 @@ export const Home = () => {
       ]
     },
     {
-      sampleProjectLabel: 'HSQL Project',
+      sampleProjectLabel: 'HSQL Project Type 1',
       sampleProjects: [
         {
-          btnLabel: '1',
-          btnAction: () => uploadPreset('sample_hsql.json')
+          btnLabel: '6',
+          btnAction: () => uploadPreset('sample_hsql-type1-6.json')
         }
       ]
     }
