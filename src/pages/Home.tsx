@@ -113,7 +113,27 @@ export const Home = () => {
       sampleProjects: [
         {
           btnLabel: '1',
-          btnAction: () => uploadPreset('sample_encryptor.json')
+          btnAction: () => uploadPreset('sample_encryptor-type-2-1.json')
+        },
+        {
+          btnLabel: '2',
+          btnAction: () => uploadPreset('sample_encryptor-type-2-2.json')
+        },
+        {
+          btnLabel: '3',
+          btnAction: () => uploadPreset('sample_encryptor-type-2-3.json')
+        },
+        {
+          btnLabel: '4',
+          btnAction: () => uploadPreset('sample_encryptor-type-2-4.jsonn')
+        },
+        {
+          btnLabel: '5',
+          btnAction: () => uploadPreset('sample_encryptor-type-2-5.json')
+        },
+        {
+          btnLabel: '6',
+          btnAction: () => uploadPreset('sample_encryptor-type-2-6.json')
         }
       ]
     },
