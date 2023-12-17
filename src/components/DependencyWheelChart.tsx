@@ -203,7 +203,7 @@ export const DependencyWheelChart = ({ data }) => {
             style={{
               display: 'flex',
               justifyContent: 'flex-start',
-              flexWrap: 'wrap'
+              flexWrap: 'nowrap'
             }}
           >
             {tableValues.map((value, idx) => (
@@ -211,7 +211,7 @@ export const DependencyWheelChart = ({ data }) => {
                 style={{
                   display: 'flex',
                   flexBasis: '250px',
-                  flexWrap: 'wrap',
+                  flexWrap: 'nowrap',
                   flexDirection: 'column'
                 }}
               >
