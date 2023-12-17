@@ -15,11 +15,12 @@ export const HowToBlock = () => {
         &#10; methodLOC: string; &#10; &#125; &#10; ProjectData = &#123;&#10;
         projectName: string | undefined;&#10; projectLOC: string | number |
         undefined;&#10; duplicatedLines: string | number | undefined;&#10;
-        duplicatedLinePercentage: string | number | undefined;&#10;
-        numberOfCloneClasses: number | string | undefined;&#10; biggestCloneLOC:
-        number | string | undefined;&#10; biggestCloneClass: number | string |
-        undefined;&#10; massThreshold: string;&#10; similarityThreshold:
-        string;&#10; clonePairs: NodeItem[];&#10; &#125;
+        cloneType: string | number | undefined; &#10; duplicatedLinePercentage:
+        string | number | undefined;&#10; numberOfCloneClasses: number | string
+        | undefined;&#10; biggestCloneLOC: number | string | undefined;&#10;
+        biggestCloneClass: number | string | undefined;&#10; massThreshold:
+        string;&#10; similarityThreshold: string;&#10; clonePairs:
+        NodeItem[];&#10; &#125;
       </Code>
       <Text mb={1}>
         2. Wait until the <i>Current File you are working with:</i>...appears.
