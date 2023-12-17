@@ -6,6 +6,9 @@ export const NetworkGraph = ({ data }) => {
       data={[data]}
       chartType="networkgraph"
       customChartOptions={{
+        chart: {
+          height: (9 / 16) * 80 + '%' // 16:9 ratio
+        },
         tooltip: {
           formatter: function () {
             let connections = [];
@@ -36,9 +39,7 @@ export const NetworkGraph = ({ data }) => {
             keys: ['from', 'to'],
             layoutAlgorithm: {
               enableSimulation: true,
-              integration: 'verlet',
-              maxSpeed: 1000,
-              maxIterations: 100
+              integration: 'verlet'
             }
           }
         },
@@ -51,7 +52,7 @@ export const NetworkGraph = ({ data }) => {
             dataLabels: {
               enabled: true,
               linkFormat: '',
-              allowOverlap: true,
+              allowOverlap: false,
               style: {
                 textOutline: false
               }
