@@ -9,6 +9,7 @@ Demo avaiable under [https://se.li54.dev/](https://se.li54.dev/)
 
 ## How to start
 - Clone the repository
+- ``npm install``
 - You need to have at least the node version in the corresponding ``.nvmrc``
 - ``npm run dev``
 - Open [http://localhost:5173](http://localhost:5173/)
